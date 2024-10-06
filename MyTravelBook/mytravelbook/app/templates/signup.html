@@ -15,6 +15,19 @@
         <div>確認用パスワード <input type="password" name="password2"></div>
         <button type="submit">登録</button>
     </form>
+
+    {% if form.errors %}
+        <div style="color: red;">
+            <ul>
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                        <li>{{ field }}: {{ error }}</li>
+                {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
     <a href="{% url 'top' %}">トップに戻る</a>
 </body>
 </html>
