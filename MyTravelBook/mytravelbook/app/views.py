@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from app.forms import SingupForm
-# Create your views here.
+from app.forms import SingupForm, LoginForm
+from django.contrib.auth import authenticate, login
 
 class TopView(View):
     def get(self, request):
@@ -27,8 +27,26 @@ class SignupView(View):
     
 class LoginView(View):
     def get(self, request):
-        return render(request, "login.html")
+        form = LoginForm()
+        return render(request, "login.html", context={
+            "form": form
+        })
+    def post(self, request):
+        form = LoginForm(data=request.POST)
+        if form.is_valid():
+            email = form.cleaned_data.get('username')  
+            password = form.cleaned_data.get('password')
+            user = authenticate(request, username=email, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('home')  # ログイン成功後にホームページにリダイレクト
+            else:
+                form.add_error(None, "メールアドレスまたはパスワードが正しくありません。")
+        return render(request, "login.html", context={
+            "form": form
+            })
+    
     
 class HomeView(View):
     def get(self, request):
-        return render(request, "home.html")   
+        return render(request, "home.html")
