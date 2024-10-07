@@ -35,7 +35,7 @@ class User(AbstractUser):
     user_permissions = None
     
     
-    name = models.CharField(max_length=64, unique=True)
+    name = models.CharField(max_length=64)#unique=True
     email = models.EmailField(max_length=128, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

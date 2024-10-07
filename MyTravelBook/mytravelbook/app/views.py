@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from app.forms import SingupForm, LoginForm
+from app.forms import SignupForm, LoginForm
 from django.contrib.auth import authenticate, login
 
 class TopView(View):
@@ -9,20 +9,25 @@ class TopView(View):
     
 class SignupView(View):
     def get(self, request):
-        form = SingupForm()
+        form = SignupForm()
         return render(request, "signup.html", context={
             "form": form
         })
     def post(self, request):
         print(request.POST)
-        form = SingupForm(request.POST)
+        form = SignupForm(request.POST)
         if form.is_valid():
             user = form.save()
             return redirect('login')#登録成功後にログインページにリダイレクト
         else:
-            print(form.errors)
-        return render(request, "signup.html",context={
-            "form": form
+            error_messages = []
+            for field in form:
+                for error in field.errors:
+                    error_messages.append(error)
+            print(error_messages)  # デバッグ用
+        return render(request, "signup.html", context={
+            "form": form,
+            "error_messages": error_messages,  
         })
     
 class LoginView(View):
@@ -34,9 +39,9 @@ class LoginView(View):
     def post(self, request):
         form = LoginForm(data=request.POST)
         if form.is_valid():
-            email = form.cleaned_data.get('username')  
+            username = form.cleaned_data.get('username')#メールアドレス  
             password = form.cleaned_data.get('password')
-            user = authenticate(request, username=email, password=password)
+            user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
                 return redirect('home')  # ログイン成功後にホームページにリダイレクト
