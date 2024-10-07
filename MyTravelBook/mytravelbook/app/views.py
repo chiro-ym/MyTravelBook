@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.views import View
 from app.forms import SignupForm, LoginForm
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 class TopView(View):
     def get(self, request):
@@ -51,7 +53,7 @@ class LoginView(View):
             "form": form
             })
     
-    
+@method_decorator(login_required, name='dispatch')    
 class HomeView(View):
     def get(self, request):
         return render(request, "home.html")
