@@ -14,17 +14,13 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
     
-    def create_superuser(self, name, email, password=None, **extra_fields):
-        """スーパーユーザーを作成するメソッド"""
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-
-        if extra_fields.get('is_staff') is not True:
-            raise ValueError("スーパーユーザーにはis_staff=Trueを設定する必要があります。")
-        if extra_fields.get('is_superuser') is not True:
-            raise ValueError("スーパーユーザーにはis_superuser=Trueを設定する必要があります。")
-
-        return self.create_user(name, email, password, **extra_fields)
+    def create_superuser(self, name, email, password=None):
+        user = self.create_user(name, email, password)
+        user.is_staff = True
+        user.is_superuser = True
+        user.is_active = True
+        user.save(using=self._db)
+        return user
 
 class User(AbstractUser):
     first_name = None
@@ -39,10 +35,12 @@ class User(AbstractUser):
     email = models.EmailField(max_length=128, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
     
     USERNAME_FIELD = "email"
     EMAIL_FIELD = "email"
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['name']
     
     objects = UserManager()
     
