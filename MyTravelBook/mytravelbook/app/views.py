@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from app.forms import SignupForm, LoginForm
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
 
 class TopView(View):
     def get(self, request):
@@ -52,8 +53,21 @@ class LoginView(View):
         return render(request, "login.html", context={
             "form": form
             })
-    
-@method_decorator(login_required, name='dispatch')    
+        
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        return redirect('top')
+       
+@method_decorator([login_required, never_cache], name='dispatch')
 class HomeView(View):
     def get(self, request):
         return render(request, "home.html")
+    
+@method_decorator([login_required, never_cache], name='dispatch')
+class MypageView(View):
+    def get(self, request):
+        user = request.user
+        return render(request, 'mypage.html',context={
+            'user': user
+        })

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>マイページ</title>
+</head>
+<body>
+    <header>
+        <h1>マイページ</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'home' %}">ホーム</a></li>
+                <li><a href="{% url 'mypage' %}">マイページ</a></li>
+                <li><a href="{% url 'logout' %}">ログアウト</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h2>マイページ</h2>
+        <p>名前: {{ user.username }}</p>
+        <p>メール: {{ user.email }}</p>
+        <p>パスワード: ********</p>
+
+        <div>
+            <a href="#">プロフィール編集</a>
+            <a href="#">パスワード変更</a>
+            <a href="{% url 'logout' %}">ログアウト</a>
+        </div>
+    </main>
+</body>
+</html>
