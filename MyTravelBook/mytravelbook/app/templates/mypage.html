@@ -3,23 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>マイページ</title>
+    <title>MyTravelBook</title>
+    <style>
+        header{
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid grey;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <h1>マイページ</h1>
+        <h1>
+            <a href="{% url 'home' %}" style="text-decoration: none; color: black;">MyTravelBook</a>
+        </h1>
         <nav>
             <ul>
-                <li><a href="{% url 'home' %}">ホーム</a></li>
-                <li><a href="{% url 'mypage' %}">マイページ</a></li>
-                <li><a href="{% url 'logout' %}">ログアウト</a></li>
+                <a href="{% url 'mypage' %}">旅行一覧</a>
+                <input type="text" placeholder="検索バー">
+                <a href="{% url 'mypage' %}">マイページ</a>
             </ul>
         </nav>
     </header>
 
     <main>
         <h2>マイページ</h2>
-        <p>名前: {{ user.username }}</p>
+        <p>名前: {{ user.name }}</p>
         <p>メール: {{ user.email }}</p>
         <p>パスワード: ********</p>
 
