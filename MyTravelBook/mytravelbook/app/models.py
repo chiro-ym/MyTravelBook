@@ -2,14 +2,13 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 
 class UserManager(BaseUserManager):
-    def create_user(self, name, email, password=None, **extra_fields):
+    def create_user(self, name, email, password=None):
         if not email:
             raise ValueError("メールアドレスは必須です。")
         email = self.normalize_email(email)
         user = self.model(
             name=name,
-            email=email,
-            **extra_fields)
+            email=email,)
         user.set_password(password)  # パスワードをハッシュ化
         user.save(using=self._db)
         return user

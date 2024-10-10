@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from app.forms import SignupForm, LoginForm
+from app.forms import SignupForm, LoginForm, UserEditForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -21,7 +21,7 @@ class SignupView(View):
         form = SignupForm(request.POST)
         if form.is_valid():
             user = form.save()
-            return redirect('login')#登録成功後にログインページにリダイレクト
+            return redirect('login')
         else:
             error_messages = []
             for field in form:
@@ -47,7 +47,7 @@ class LoginView(View):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('home')  # ログイン成功後にホームページにリダイレクト
+                return redirect('home') 
             else:
                 form.add_error(None, "メールアドレスまたはパスワードが正しくありません。")
         return render(request, "login.html", context={
@@ -58,12 +58,20 @@ class LogoutView(View):
     def get(self, request):
         logout(request)
         return redirect('top')
-       
-@method_decorator([login_required, never_cache], name='dispatch')
-class HomeView(View):
-    def get(self, request):
-        return render(request, "home.html")
     
+@login_required
+def user_edit(request):
+    if request.method == 'POST':
+        form = UserEditForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('mypage')
+    else:
+        form = UserEditForm(instance=request.user)
+    return render(request, 'user_edit.html',context={
+            'form':form
+            })
+     
 @method_decorator([login_required, never_cache], name='dispatch')
 class MypageView(View):
     def get(self, request):
@@ -71,3 +79,7 @@ class MypageView(View):
         return render(request, 'mypage.html',context={
             'user': user
         })
+
+class HomeView(View):
+    def get(self, request):
+        return render(request, "home.html")

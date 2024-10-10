@@ -58,3 +58,11 @@ class LoginForm(AuthenticationForm):
                 self.error_messages['inactive'],
                 code='inactive',
             )
+        
+class UserEditForm(forms.ModelForm):
+    name = forms.CharField(label='名前', max_length=64)
+    email = forms.EmailField(label='メールアドレス')
+    
+    class Meta:
+        model = User
+        fields = ('name', 'email')
