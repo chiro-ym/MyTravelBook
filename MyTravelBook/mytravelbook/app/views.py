@@ -3,8 +3,10 @@ from django.views import View
 from app.forms import SignupForm, LoginForm, UserEditForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import PasswordChangeView
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
+from django.urls import reverse_lazy
 
 class TopView(View):
     def get(self, request):
@@ -57,8 +59,8 @@ class LoginView(View):
 class LogoutView(View):
     def get(self, request):
         logout(request)
-        return redirect('top')
-    
+        return redirect('login')
+            
 @login_required
 def user_edit(request):
     if request.method == 'POST':
@@ -71,6 +73,10 @@ def user_edit(request):
     return render(request, 'user_edit.html',context={
             'form':form
             })
+    
+class CustomPasswordChangeView(PasswordChangeView):
+    template_name = 'password_change.html'
+    success_url = reverse_lazy('password_change_done')
      
 @method_decorator([login_required, never_cache], name='dispatch')
 class MypageView(View):

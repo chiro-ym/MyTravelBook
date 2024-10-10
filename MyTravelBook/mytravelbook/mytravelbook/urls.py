@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from app.views import TopView, SignupView, LoginView, LogoutView, HomeView, MypageView
 from app import views
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,6 +27,8 @@ urlpatterns = [
     path('login/', LoginView.as_view(), name="login"),
     path('logout/', LogoutView.as_view(), name="logout"),
     path('user_edit/', views.user_edit, name="user_edit"),
+    path('password_change/', auth_views.PasswordChangeView.as_view(template_name='password_change.html'), name='password_change'),
+    path('password_change/done/', auth_views.PasswordChangeDoneView.as_view(template_name='password_change_done.html'), name='password_change_done'),
     path('home/', HomeView.as_view(), name="home"),
     path('mypage/', MypageView.as_view(), name="mypage"),
 ]
