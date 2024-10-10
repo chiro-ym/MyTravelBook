@@ -8,7 +8,8 @@ from django.contrib.auth.views import PasswordChangeView
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.urls import reverse_lazy
-
+from .forms import TravelRecordForm
+from .models import TravelRecord, Prefecture
 class TopView(View):
     def get(self, request):
         return render(request, "top.html")
@@ -100,3 +101,30 @@ class MypageView(View):
 class HomeView(View):
     def get(self, request):
         return render(request, "home.html")
+    
+@login_required
+def create_travel_record(request):
+    if request.method == 'POST':
+        form = TravelRecordForm(request.POST, request.FILES)
+        if form.is_valid():
+            travel_record = form.save(commit=False)
+            travel_record.user = request.user
+            travel_record.save()
+            messages.success(request, '旅行記録が正常に追加されました。') 
+            return redirect('travel_list')
+    else:
+        form = TravelRecordForm()
+        
+    prefectures = Prefecture.objects.all() 
+    return render(request, 'create_travel_record.html', context={
+        'form': form,
+        'messages': messages.get_messages(request),
+        'prefectures': prefectures
+        
+        })
+    
+@login_required
+def travel_list(request):
+    travel_records = TravelRecord.objects.all()
+    return render(request, 'travel_list.html', {'travel_records': travel_records})
+    

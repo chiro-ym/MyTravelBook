@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
 from app.models import User
+from .models import TravelRecord
 
 class SignupForm(UserCreationForm):
     class Meta:
@@ -104,3 +105,12 @@ class CustomPasswordChangeForm(PasswordChangeForm):
             raise forms.ValidationError(("新しいパスワードが一致しません。"))
 
         return password2
+
+class TravelRecordForm(forms.ModelForm):
+    class Meta:
+        model = TravelRecord
+        fields = ['title', 'start_date', 'end_date', 'prefecture', 'city', 'main_photo_url', 'comment',]
+        widgets = {
+            'start_date': forms.DateInput(attrs={'type': 'date'}),
+            'end_date': forms.DateInput(attrs={'type': 'date'})
+        }

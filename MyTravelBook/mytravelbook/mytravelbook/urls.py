@@ -14,4 +14,6 @@ urlpatterns = [
     path('password_change/done/', CustomPasswordChangeDoneView.as_view(), name='password_change_done'),
     path('home/', HomeView.as_view(), name="home"),
     path('mypage/', MypageView.as_view(), name="mypage"),
+    path('travel_list/', views.travel_list, name='travel_list'), 
+    path('create/', views.create_travel_record, name='create_travel_record'),
 ]
