@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
 from app.models import User
 
 class SignupForm(UserCreationForm):
@@ -66,3 +66,41 @@ class UserEditForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('name', 'email')
+        
+class CustomPasswordChangeForm(PasswordChangeForm):
+    error_messages = {
+        'password_in_common': '',  # これを空文字に設定
+        'password_too_similar': '',
+        'password_too_short': '',
+        'password_entirely_numeric': '',
+        'password_incorrect': ("現在のパスワードが正しくありません。"),
+        'password_mismatch': ("新しいパスワードが一致しません。"),
+    }
+
+    old_password = forms.CharField(
+        label=("現在のパスワード"),
+        strip=False,
+        widget=forms.PasswordInput,
+        error_messages={'required': ("現在のパスワードを入力してください。")},
+    )
+    new_password1 = forms.CharField(
+        label=("新しいパスワード"),
+        strip=False,
+        widget=forms.PasswordInput,
+        error_messages={'required': ("新しいパスワードを入力してください。")},
+    )
+    new_password2 = forms.CharField(
+        label=("新しいパスワード（確認用）"),
+        strip=False,
+        widget=forms.PasswordInput,
+        error_messages={'required': ("確認用パスワードを入力してください。")},
+    )
+
+    def clean_new_password2(self):
+        password1 = self.cleaned_data.get('new_password1')
+        password2 = self.cleaned_data.get('new_password2')
+
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError(("新しいパスワードが一致しません。"))
+
+        return password2

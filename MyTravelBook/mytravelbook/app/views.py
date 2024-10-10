@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from app.forms import SignupForm, LoginForm, UserEditForm
+from app.forms import SignupForm, LoginForm, UserEditForm, CustomPasswordChangeForm
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import PasswordChangeView
@@ -75,8 +76,18 @@ def user_edit(request):
             })
     
 class CustomPasswordChangeView(PasswordChangeView):
+    form_class = CustomPasswordChangeForm
     template_name = 'password_change.html'
     success_url = reverse_lazy('password_change_done')
+    
+    def form_valid(self, form):
+        
+        messages.success(self.request, "パスワードが正常に変更されました。")
+        return super().form_valid(form)
+    
+class CustomPasswordChangeDoneView(View):
+    def get(self, request):
+        return render(request, 'password_change_done.html')
      
 @method_decorator([login_required, never_cache], name='dispatch')
 class MypageView(View):
