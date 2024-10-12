@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
-from app.models import User
+from app.models import User, Prefecture
 from .models import TravelRecord
 
 class SignupForm(UserCreationForm):
@@ -107,10 +107,28 @@ class CustomPasswordChangeForm(PasswordChangeForm):
         return password2
 
 class TravelRecordForm(forms.ModelForm):
+    title = forms.CharField(required=True, max_length=100)
+    prefecture = forms.ModelChoiceField(queryset=Prefecture.objects.all(), required=False)
+    city = forms.CharField(required=False, max_length=100)
+    start_date = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date'}))
+    end_date = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date'}))
+        
     class Meta:
         model = TravelRecord
-        fields = ['title', 'start_date', 'end_date', 'prefecture', 'city', 'main_photo_url', 'comment',]
-        widgets = {
-            'start_date': forms.DateInput(attrs={'type': 'date'}),
-            'end_date': forms.DateInput(attrs={'type': 'date'})
-        }
+        fields = ['title', 'start_date', 'end_date', 'prefecture', 'city', 'main_photo_url', 'comment']
+    
+prefectures = [
+    '北海道', '青森県', '岩手県', '宮城県', '秋田県', '山形県', '福島県',
+    '茨城県', '栃木県', '群馬県', '埼玉県', '千葉県', '東京都', '神奈川県',
+    '新潟県', '富山県', '石川県', '福井県', '山梨県', '長野県',
+    '岐阜県', '静岡県', '愛知県', '三重県', '滋賀県', '京都府', '大阪府', '兵庫県',
+    '奈良県', '和歌山県', '鳥取県', '島根県', '岡山県', '広島県', '山口県',
+    '徳島県', '香川県', '愛媛県', '高知県', '福岡県', '佐賀県', '長崎県', '熊本県',
+    '大分県', '宮崎県', '鹿児島県', '沖縄県', 'その他'
+]
+
+for pref_name in prefectures:
+    if not Prefecture.objects.filter(name=pref_name).exists():
+        Prefecture.objects.create(name=pref_name)
+    else:
+        print(f"{pref_name}はすでに存在しています。")

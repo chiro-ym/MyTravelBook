@@ -48,11 +48,11 @@ class User(AbstractUser):
  
 class TravelRecord(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    prefecture = models.ForeignKey('Prefecture', on_delete=models.SET_NULL, null=True)
-    city = models.CharField(max_length=100)
+    prefecture = models.ForeignKey('Prefecture', on_delete=models.SET_NULL, blank=True, null=True)
+    city = models.CharField(max_length=100, blank=True)
     title = models.CharField(max_length=100)
-    start_date = models.DateField()
-    end_date = models.DateField()
+    start_date = models.DateField(null=True, blank=True)
+    end_date = models.DateField(null=True, blank=True)
     main_photo_url = models.ImageField(upload_to='photos/', blank=True, null=True)
     comment = models.TextField(blank=True, null=True)
     accommodation_info = models.TextField(blank=True, null=True)
@@ -67,6 +67,8 @@ class TravelRecord(models.Model):
     
 class Prefecture(models.Model):
     name = models.CharField(max_length=100, unique=True)
+    create_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
