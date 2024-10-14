@@ -70,7 +70,7 @@ class UserEditForm(forms.ModelForm):
         
 class CustomPasswordChangeForm(PasswordChangeForm):
     error_messages = {
-        'password_in_common': '',  # これを空文字に設定
+        'password_in_common': '',  
         'password_too_similar': '',
         'password_too_short': '',
         'password_entirely_numeric': '',

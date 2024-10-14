@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyTravelBook</title>
+    <style>
+        header{
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid grey;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>
+            <a href="{% url 'home' %}" style="text-decoration: none; color: black;">MyTravelBook</a>
+        </h1>
+        <nav>
+            <ul>
+                <a href="{% url 'mypage' %}">旅行一覧</a>
+                <input type="text" placeholder="検索バー">
+                <a href="{% url 'mypage' %}">マイページ</a>
+            </ul>
+        </nav>
+    </header>
+
+    <h2>旅行詳細</h2>
+
+    

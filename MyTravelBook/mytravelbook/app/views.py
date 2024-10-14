@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from app.forms import SignupForm, LoginForm, UserEditForm, CustomPasswordChangeForm
 from django.contrib import messages
@@ -10,6 +10,8 @@ from django.views.decorators.cache import never_cache
 from django.urls import reverse_lazy
 from .forms import TravelRecordForm
 from .models import TravelRecord, Prefecture
+
+
 class TopView(View):
     def get(self, request):
         return render(request, "top.html")
@@ -98,6 +100,7 @@ class MypageView(View):
             'user': user
         })
 
+@method_decorator([login_required, never_cache], name='dispatch')
 class HomeView(View):
     def get(self, request):
         return render(request, "home.html")
@@ -111,7 +114,7 @@ def create_travel_record(request):
             travel_record.user = request.user
             travel_record.save()
             messages.success(request, '旅行記録が正常に追加されました。') 
-            return redirect('travel_list')
+            return redirect('travel_detail',travel_record.id)
     else:
         form = TravelRecordForm()
         
@@ -122,6 +125,14 @@ def create_travel_record(request):
         'prefectures': prefectures
         
         })
+    
+@method_decorator([login_required, never_cache], name='dispatch')
+class TravelDetailView(View):
+    def get(self, request, travel_id):
+        travel_record = get_object_or_404(TravelRecord, id=travel_id)
+        return render(request, 'travel_detail.html', context={
+            'travel_record': travel_record
+        })       
     
 @login_required
 def travel_list(request):
