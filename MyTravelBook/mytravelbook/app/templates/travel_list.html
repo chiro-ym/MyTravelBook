@@ -15,7 +15,7 @@
 <body>
     <header>
         <h1>
-            <a href="{% url 'home' %}" style="text-decoration: none; color: black;">MyTravelBook</a>
+            <a href="{% url 'travel_list' %}" style="text-decoration: none; color: black;">MyTravelBook</a>
         </h1>
         <nav>
             <ul>
@@ -25,8 +25,25 @@
             </ul>
         </nav>
     </header>
+    
+    {% load static %}
     <h2>旅行記録一覧</h2>
-    <!-- 旅行記録を表示するためのコードをここに追加 -->
+    <ul>
+        {% for record in travel_records %}
+        <li>
+            <a href="{% url 'travel_detail' record.id %}">
+                {{ record.title }} ({{ record.start_date }} - {{ record.end_date }})
+            </a>
+            {% if record.main_photo_url %}
+                <img src="{{ record.main_photo_url.url }}" alt="メイン画像" width="50" height="50">
+            {% else %}
+            <img src="{% static 'photos/default.jpg' %}" alt="デフォルト画像" width="50" height="50">   
+            {% endif %}    
+        </li>
+        {% empty %}
+        <li>旅行記録がありません。</li>
+        {% endfor %}
+    </ul>
 </body>
 </html>
 

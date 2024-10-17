@@ -5,6 +5,8 @@ from app.views import (TopView, SignupView, LoginView, LogoutView, HomeView,
                        TravelDetailView
                        )
 from app import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -21,3 +23,6 @@ urlpatterns = [
     path('create_travel_record/', views.create_travel_record, name="create_travel_record"),
     path('travel_detail/<int:travel_id>', TravelDetailView.as_view(), name="travel_detail"),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

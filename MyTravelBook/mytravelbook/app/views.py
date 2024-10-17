@@ -112,9 +112,16 @@ def create_travel_record(request):
         if form.is_valid():
             travel_record = form.save(commit=False)
             travel_record.user = request.user
+            
+            if not travel_record.main_photo_url:
+                travel_record.main_photo_url = 'photos/default.jpg'
+            
             travel_record.save()
             messages.success(request, '旅行記録が正常に追加されました。') 
             return redirect('travel_detail',travel_record.id)
+        else:
+            messages.error(request, 'フォームにエラーがあります。再度お試しください。')
+            print(form.errors)
     else:
         form = TravelRecordForm()
         
@@ -136,6 +143,8 @@ class TravelDetailView(View):
     
 @login_required
 def travel_list(request):
-    travel_records = TravelRecord.objects.all()
-    return render(request, 'travel_list.html', {'travel_records': travel_records})
+    travel_records = TravelRecord.objects.filter(user=request.user)
+    return render(request, 'travel_list.html',context= {
+        'travel_records': travel_records
+        })
     
