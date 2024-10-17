@@ -107,15 +107,49 @@ class CustomPasswordChangeForm(PasswordChangeForm):
         return password2
 
 class TravelRecordForm(forms.ModelForm):
-    title = forms.CharField(required=True, max_length=100)
-    prefecture = forms.ModelChoiceField(queryset=Prefecture.objects.all(), required=False)
-    city = forms.CharField(required=False, max_length=100)
-    start_date = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date'}))
-    end_date = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date'}))
-        
+    title = forms.CharField(required=True, max_length=100, label="タイトル")
+    prefecture = forms.ModelChoiceField(queryset=Prefecture.objects.all(), required=False, label="場所")
+    city = forms.CharField(required=False, max_length=100,label="")
+    start_date = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date'}), label="出発日")
+    end_date = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date'}), label="帰宅日")
+    main_photo_url = forms.ImageField(required=False, label="メイン写真")
+    comment = forms.CharField(required=False, widget=forms.Textarea, label="コメント")
+    accommodation_info = forms.CharField(required=False, widget=forms.Textarea, label="宿泊情報")
+    meal_info = forms.CharField(required=False, widget=forms.Textarea, label="食事情報")
+    transport_info = forms.CharField(required=False, widget=forms.Textarea, label="交通情報")
+    cost_info = forms.CharField(required=False, widget=forms.Textarea, label="旅行費用")    
+    
+    comment = forms.CharField(
+        required=False, 
+        widget=forms.Textarea(attrs={'rows': 3, 'cols': 50}), 
+        label="コメント"
+    )
+
+    accommodation_info = forms.CharField(
+        required=False, 
+        widget=forms.Textarea(attrs={'rows': 3, 'cols': 50}), 
+        label="宿泊情報"
+    )
+    meal_info = forms.CharField(
+        required=False, 
+        widget=forms.Textarea(attrs={'rows': 3, 'cols': 50}), 
+        label="食事情報"
+    )
+    transport_info = forms.CharField(
+        required=False, 
+        widget=forms.Textarea(attrs={'rows': 3, 'cols': 50}), 
+        label="交通情報"
+    )
+    cost_info = forms.CharField(
+        required=False, 
+        widget=forms.Textarea(attrs={'rows': 3, 'cols': 50}), 
+        label="旅行費用"
+    )
+    
     class Meta:
         model = TravelRecord
-        fields = ['title', 'start_date', 'end_date', 'prefecture', 'city', 'main_photo_url', 'comment']
+        fields = ['title', 'start_date', 'end_date', 'prefecture', 'city', 'main_photo_url', 'comment',
+                  'accommodation_info','meal_info', 'transport_info', 'cost_info']
     
 prefectures = [
     '北海道', '青森県', '岩手県', '宮城県', '秋田県', '山形県', '福島県',
