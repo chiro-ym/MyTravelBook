@@ -108,7 +108,7 @@ class CustomPasswordChangeForm(PasswordChangeForm):
 
 class TravelRecordForm(forms.ModelForm):
     title = forms.CharField(required=True, max_length=100, label="タイトル")
-    prefecture = forms.ModelChoiceField(queryset=Prefecture.objects.all(), required=False, label="場所")
+    prefecture = forms.ModelChoiceField(queryset=Prefecture.objects.all(), required=False, label="旅行場所")
     city = forms.CharField(required=False, max_length=100,label="")
     start_date = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date'}), label="出発日")
     end_date = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date'}), label="帰宅日")
