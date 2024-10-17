@@ -25,7 +25,47 @@
             </ul>
         </nav>
     </header>
+    
+    {% load static %}
+    <h2>{{ travel_record.title }}</h2>
+    <p>旅行先: {{ travel_record.destination }}</p>
+    <p>出発日: {{ travel_record.start_date }}</p>
+    <p>終了日: {{ travel_record.end_date }}</p>
+    
+    {% if travel_record.main_photo_url %}
+        <img src="{{ travel_record.main_photo_url.url }}" alt="メイン画像" width="300">
+    {% else %}
+        <img src="{% static 'photos/default.jpg' %}" alt="デフォルト画像" width="300">
+    {% endif %}
+    
+    <h4>コメント</h4>
+    <p>{{ travel_record.comment }}</p>
 
-    <h2>旅行詳細</h2>
+    <details>
+        <summary>旅行詳細</summary>
+
+        <div>
+            <strong>宿泊情報:</strong>
+            <P>{{ travel_record.accommodation_info|default:"情報がありません" }}
+        </div>
+
+        <div>
+            <strong>食事情報</strong>
+            <P>{{ travel_record.meal_info|default:"情報がありません" }}
+        </div>
+
+        <div>
+            <strong>交通情報</strong>
+            <P>{{ travel_record.transport_info|default:"情報がありません" }}
+        </div>
+
+        <div>
+            <strong>旅行費用</strong>
+            <P>{{ travel_record.cost_info|default:"情報がありません" }}
+        </div>
+
+
+</body>
+</html>
 
     

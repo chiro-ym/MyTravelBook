@@ -148,3 +148,10 @@ def travel_list(request):
         'travel_records': travel_records
         })
     
+@login_required
+def travel_detail(request, travel_id):
+    travel_record = get_object_or_404(TravelRecord, id=travel_id)
+    
+    return render(request, 'travel_detail.html',context={
+        'travel_record':travel_record
+    })
