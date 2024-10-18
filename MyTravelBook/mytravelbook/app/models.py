@@ -59,16 +59,35 @@ class TravelRecord(models.Model):
     meal_info = models.TextField(blank=True, null=True)
     transport_info = models.TextField(blank=True, null=True)
     cost_info = models.TextField(blank=True, null=True)
-    create_at = models.DateTimeField(auto_now_add=True)
-    update_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     
     def __str__(self):
         return f"Travel record for {self.user} in {self.prefecture}"
     
 class Prefecture(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    create_at = models.DateTimeField(auto_now_add=True)
-    update_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
+    
+class Category(models.Model):
+    travel_record = models.ForeignKey(TravelRecord, on_delete=models.CASCADE)
+    category_name = models.CharField(max_length=50)
+    category_comment = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return self.category_name
+    
+class Photo(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    photo_url = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return f"{self.category.category_name} - Photo"
