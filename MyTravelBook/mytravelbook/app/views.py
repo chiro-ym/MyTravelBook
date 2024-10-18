@@ -139,18 +139,28 @@ class TravelDetailView(View):
         travel_record = get_object_or_404(TravelRecord, id=travel_id)
         
         fixed_categories = ['観光', '食べる', '宿泊']
+        
+        existing_categories = travel_record.category_set.values_list('category_name', flat=True)
+        
         for category_name in fixed_categories:
-            Category.objects.get_or_create(
+            if category_name not in existing_categories:
+                Category.objects.get_or_create(
                 travel_record=travel_record,
                 category_name=category_name
             )
             
         categories = travel_record.category_set.all()
         
+        photos = []
+        for category in categories:
+            photos.extend(category.photo_set.all())
+        
         return render(request, 'travel_detail.html', context={
             'travel_record': travel_record,
             'categories': categories,
-        })       
+            'photos': photos,
+        })
+            
     
 @method_decorator([login_required, never_cache], name='dispatch')
 class CategoryDetailView(View):
@@ -159,11 +169,13 @@ class CategoryDetailView(View):
         category = get_object_or_404(Category, id=category_id)
         
         photos = category.photo_set.all()
+        categories = travel_record.category_set.all()
         
         return render(request, 'category_detail.html', context={
             'travel_record': travel_record,
             'category':category,
             'photos': photos,
+            'categories': categories, 
         })    
     
 @login_required

@@ -61,6 +61,7 @@ class TravelRecord(models.Model):
     cost_info = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
     
     def __str__(self):
         return f"Travel record for {self.user} in {self.prefecture}"
@@ -85,7 +86,7 @@ class Category(models.Model):
     
 class Photo(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    photo_url = models.CharField(max_length=255)
+    photo_url = models.ImageField(upload_to='photos/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
