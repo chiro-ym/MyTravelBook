@@ -64,8 +64,8 @@
                 <a href="{% url 'category_detail' travel_record.id category.id %}">{{ category.category_name }}</a>
             </li>
         {% endfor %}
-        <li><a href="#">＋</a></li> <!-- カテゴリ追加のためのリンク -->
-        <li><a href="#">＋</a></li> <!-- メモ追加のためのリンク -->
+        <li><a href="{% url 'add_category' travel_record.id %}">＋</a></li>
+        <li><a href="{% url 'add_category' travel_record.id %}">＋</a></li>
     </ul>
 
     <div class="photo-list">

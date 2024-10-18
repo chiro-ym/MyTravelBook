@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path
 from app.views import (TopView, SignupView, LoginView, LogoutView, HomeView,
                        MypageView, CustomPasswordChangeView, CustomPasswordChangeDoneView,
-                       TravelDetailView,CategoryDetailView
+                       TravelDetailView,CategoryDetailView, CategoryAddView,
                        )
 from app import views
 from django.conf import settings
@@ -23,7 +23,9 @@ urlpatterns = [
     path('create_travel_record/', views.create_travel_record, name="create_travel_record"),
     path('travel_detail/<int:travel_id>/', TravelDetailView.as_view(), name="travel_detail"),
     path('category_detail/<int:travel_id>/category/<int:category_id>/', CategoryDetailView.as_view(), name="category_detail"),
+    path('travel/<int:travel_id>/add_category/', CategoryAddView.as_view(), name='add_category'),
 ]
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

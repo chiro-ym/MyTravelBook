@@ -176,7 +176,27 @@ class CategoryDetailView(View):
             'category':category,
             'photos': photos,
             'categories': categories, 
-        })    
+        })
+        
+@method_decorator(login_required, name='dispatch')
+class CategoryAddView(View):
+    def get(self, request, travel_id):
+        travel_record = get_object_or_404(TravelRecord, id=travel_id)
+        return render(request, 'add_category.html', {'travel_record':travel_record})
+    
+    def post(self, request, travel_id):
+        travel_record = get_object_or_404(TravelRecord, id=travel_id)
+        category_name = request.POST.get('category_name')
+        
+        if category_name:
+            Category.objects.create(travel_record=travel_record, category_name=category_name)
+            return redirect('travel_detail', travel_id=travel_id)
+        
+        error_message = "カテゴリ名を入力してください"
+        return render(request, 'add_category.html', context={
+            'travel_record':travel_record,
+            'error_message':error_message
+        })
     
 @login_required
 def travel_list(request):

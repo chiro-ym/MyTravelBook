@@ -51,6 +51,8 @@
                 <a href="{% url 'category_detail' travel_record.id category.id %}">{{ category.category_name }}</a>
             </li>
         {% endfor %}
+        <li><a href="{% url 'add_category' travel_record.id %}">＋</a></li>
+        <li><a href="{% url 'add_category' travel_record.id %}">＋</a></li>
     </ul>
 
     {% load static %}
