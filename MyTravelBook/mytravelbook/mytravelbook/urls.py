@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path
 from app.views import (TopView, SignupView, LoginView, LogoutView, HomeView,
                        MypageView, CustomPasswordChangeView, CustomPasswordChangeDoneView,
-                       TravelDetailView
+                       TravelDetailView,CategoryDetailView
                        )
 from app import views
 from django.conf import settings
@@ -21,7 +21,8 @@ urlpatterns = [
     path('mypage/', MypageView.as_view(), name="mypage"),
     path('travel_list/', views.travel_list, name="travel_list"), 
     path('create_travel_record/', views.create_travel_record, name="create_travel_record"),
-    path('travel_detail/<int:travel_id>', TravelDetailView.as_view(), name="travel_detail"),
+    path('travel_detail/<int:travel_id>/', TravelDetailView.as_view(), name="travel_detail"),
+    path('category_detail/<int:travel_id>/category/<int:category_id>/', CategoryDetailView.as_view(), name="category_detail"),
 ]
 
 if settings.DEBUG:

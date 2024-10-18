@@ -9,7 +9,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.urls import reverse_lazy
 from .forms import TravelRecordForm
-from .models import TravelRecord, Prefecture
+from .models import TravelRecord, Prefecture, Category
 
 
 class TopView(View):
@@ -137,9 +137,34 @@ def create_travel_record(request):
 class TravelDetailView(View):
     def get(self, request, travel_id):
         travel_record = get_object_or_404(TravelRecord, id=travel_id)
+        
+        fixed_categories = ['観光', '食べる', '宿泊']
+        for category_name in fixed_categories:
+            Category.objects.get_or_create(
+                travel_record=travel_record,
+                category_name=category_name
+            )
+            
+        categories = travel_record.category_set.all()
+        
         return render(request, 'travel_detail.html', context={
-            'travel_record': travel_record
+            'travel_record': travel_record,
+            'categories': categories,
         })       
+    
+@method_decorator([login_required, never_cache], name='dispatch')
+class CategoryDetailView(View):
+    def get(self, request, travel_id, category_id):
+        travel_record = get_object_or_404(TravelRecord, id=travel_id)
+        category = get_object_or_404(Category, id=category_id)
+        
+        photos = category.photo_set.all()
+        
+        return render(request, 'category_detail.html', context={
+            'travel_record': travel_record,
+            'category':category,
+            'photos': photos,
+        })    
     
 @login_required
 def travel_list(request):
@@ -148,10 +173,4 @@ def travel_list(request):
         'travel_records': travel_records
         })
     
-@login_required
-def travel_detail(request, travel_id):
-    travel_record = get_object_or_404(TravelRecord, id=travel_id)
-    
-    return render(request, 'travel_detail.html',context={
-        'travel_record':travel_record
-    })
+
