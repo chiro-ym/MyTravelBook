@@ -44,15 +44,19 @@
         </nav>
     </header>
 
+    <p>カテゴリの数: {{ categories.count }}</p>
     <ul class="tabs">
         <li><a href="{% url 'travel_detail' travel_record.id %}" class="active">旅行概要</a></li>
+       
         {% for category in categories %}
             <li>
                 <a href="{% url 'category_detail' travel_record.id category.id %}">{{ category.category_name }}</a>
             </li>
         {% endfor %}
+
+        {% if categories.count < 7 %}
         <li><a href="{% url 'add_category' travel_record.id %}">＋</a></li>
-        <li><a href="{% url 'add_category' travel_record.id %}">＋</a></li>
+        {% endif %}
     </ul>
 
     {% load static %}
@@ -93,6 +97,17 @@
             <p>{{ travel_record.cost_info|default:"情報がありません" }}
         </div>
     </details>
+
+<div>
+    <form method="GET" action="{% url 'travel_record_edit' travel_record.id %}">
+        <button type="submit">編集</button>
+    </form>
+
+    <form method="POST" action="{% url 'travel_record_delete' travel_record.id %}">
+        {% csrf_token %}
+        <button type="submit" onclick="return confirm('本当に削除しますか？');">削除</button>
+    </form>
+</div>
 
 </body>
 </html>

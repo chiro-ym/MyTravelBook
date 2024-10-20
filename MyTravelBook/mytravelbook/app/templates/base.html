@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}MyTravelBook{% endblock %}</title>
+    <style>
+        header {
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid grey;
+        }
+       
+    </style>
+    {% block extra_head %}
+    <!-- ページごとの追加CSSやメタデータ -->
+    {% endblock %}
+</head>
+<body>
+    <header>
+        <h1>
+            <a href="{% url 'travel_list' %}" style="text-decoration: none; color: black;">MyTravelBook</a>
+        </h1>
+        <nav>
+            <ul>
+                <a href="{% url 'travel_list' %}">旅行一覧</a>
+                <input type="text" placeholder="検索バー">
+                <a href="{% url 'mypage' %}">マイページ</a>
+            </ul>
+        </nav>
+    </header>
+    
+    {% block content %}
+    <!-- 各ページごとのコンテンツ -->
+    {% endblock %}
+
+    <footer>
+        <!-- 必要であればフッター -->
+    </footer>
+</body>
+</html>

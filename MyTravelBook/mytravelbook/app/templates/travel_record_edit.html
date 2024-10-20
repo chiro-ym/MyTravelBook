@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}MyTravelBook{% endblock %}
+
+{% block content %}
+    <h2>旅行記録を編集</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{  form.as_p }}
+        <button type="submit">保存</button>
+    </form>
+    <a href="{% url 'travel_detail' travel_record.id %}">キャンセル</a>
+    {% endblock %}

@@ -150,6 +150,7 @@ class TravelDetailView(View):
             )
             
         categories = travel_record.category_set.all()
+        print("カテゴリ数:", categories.count())#デバッグ
         
         photos = []
         for category in categories:
@@ -159,8 +160,34 @@ class TravelDetailView(View):
             'travel_record': travel_record,
             'categories': categories,
             'photos': photos,
+            'custom_categories_count': categories.exclude(category_name__in=fixed_categories).count(),
         })
             
+@method_decorator([login_required, never_cache], name='dispatch')
+class TravelEditView(View):
+    def get(self, request, travel_id):
+        travel_record = get_object_or_404(TravelRecord, id=travel_id)
+        form = TravelRecordForm(instance=travel_record)
+        return render(request, 'travel_record_edit.html', context={
+            'form':form
+        })
+        
+    def post(self, request, travel_id):
+        travel_record = get_object_or_404(TravelRecord, id=travel_id)
+        form = TravelRecordForm(request.POST, instance=travel_record)
+        if form.is_valid():
+            form.save()
+            return redirect('travel_detail', travel_id=travel_record.id)
+        return render(request, 'travel_record_edit.html',context={
+            'form':form
+        })
+        
+@method_decorator([login_required, never_cache], name='dispatch')
+class TravelDeleteView(View):
+    def post(self, request, travel_id):
+        travel_record = get_object_or_404(TravelRecord, id=travel_id)
+        travel_record.delete()
+        return redirect('travel_list')
     
 @method_decorator([login_required, never_cache], name='dispatch')
 class CategoryDetailView(View):
@@ -177,6 +204,7 @@ class CategoryDetailView(View):
             'photos': photos,
             'categories': categories, 
         })
+
         
 @method_decorator(login_required, name='dispatch')
 class CategoryAddView(View):
@@ -187,6 +215,15 @@ class CategoryAddView(View):
     def post(self, request, travel_id):
         travel_record = get_object_or_404(TravelRecord, id=travel_id)
         category_name = request.POST.get('category_name')
+        
+        user_added_categories = travel_record.category_set.exclude(category_name__in=['観光', '食べる', '宿泊'])
+        
+        if travel_record.category_set.count() >= 2:
+            error_message = "カテゴリは2つまでしか追加できません"
+            return render(request, 'add_category.html',context={
+                'travel_record': travel_record,
+                'error_message': error_message
+            })
         
         if category_name:
             Category.objects.create(travel_record=travel_record, category_name=category_name)
