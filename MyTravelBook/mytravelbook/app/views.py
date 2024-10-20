@@ -169,7 +169,9 @@ class TravelEditView(View):
         travel_record = get_object_or_404(TravelRecord, id=travel_id)
         form = TravelRecordForm(instance=travel_record)
         return render(request, 'travel_record_edit.html', context={
-            'form':form
+            'form':form,
+            'travel_record': travel_record,
+            'travel_id': travel_id
         })
         
     def post(self, request, travel_id):
@@ -179,7 +181,9 @@ class TravelEditView(View):
             form.save()
             return redirect('travel_detail', travel_id=travel_record.id)
         return render(request, 'travel_record_edit.html',context={
-            'form':form
+            'form':form,
+            'travel_record': travel_record,
+            'travel_id': travel_id
         })
         
 @method_decorator([login_required, never_cache], name='dispatch')
