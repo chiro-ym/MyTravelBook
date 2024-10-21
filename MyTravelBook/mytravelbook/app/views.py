@@ -270,6 +270,16 @@ def add_photo(request, category_id):
     })
     
 @login_required
+def delete_photo(request, travel_id, category_id, photo_id):
+    photo = get_object_or_404(Photo, id=photo_id, category_id=category_id)
+    
+    if request.method == "POST":
+        photo.delete()
+        return redirect('category_detail',travel_id=travel_id, category_id=category_id)
+    
+    return redirect('category_detail',travel_id=travel_id, category_id=category_id)
+        
+@login_required
 def edit_comment(request, travel_id, category_id):
     category = get_object_or_404(Category, id=category_id)
 

@@ -27,6 +27,7 @@ urlpatterns = [
     path('category_detail/<int:travel_id>/category/<int:category_id>/', CategoryDetailView.as_view(), name="category_detail"),
     path('travel/<int:travel_id>/add_category/', CategoryAddView.as_view(), name='add_category'),
     path('category/<int:category_id>/add_photo/', views.add_photo, name='add_photo'),
+    path('category/<int:travel_id>/category/<int:category_id>/photo/<int:photo_id>/delete/', views.delete_photo, name='delete_photo'),
      path('travel/<int:travel_id>/category/<int:category_id>/edit_comment/', views.edit_comment, name='edit_comment'),
 ]
 

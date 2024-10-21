@@ -78,10 +78,10 @@
             <div>
                 {% if photo.photo_url %}
                     <img src="{{ photo.photo_url.url }}" alt="写真">
-                     <form method="POST" action="{% url 'delete_photo' category.id photo.id %}">
-                    {% csrf_token %}
-                    <button type="submit">削除</button>
-                </form>
+                    <form method="POST" action="{% url 'delete_photo' travel_record.id category.id photo.id %}">
+                        {% csrf_token %}
+                        <button type="submit">削除</button>
+                    </form>
                 {% else %}
                     <div>写真がありません。</div>
                 {% endif %}
@@ -90,6 +90,7 @@
             <div>写真がありません。</div>
         {% endfor %}
     </div>
+    
     
     <form method="POST" action="{% url 'add_photo' category.id %}" enctype="multipart/form-data">
         {% csrf_token %}
