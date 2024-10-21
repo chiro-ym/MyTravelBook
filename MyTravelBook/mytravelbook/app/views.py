@@ -176,7 +176,7 @@ class TravelEditView(View):
         
     def post(self, request, travel_id):
         travel_record = get_object_or_404(TravelRecord, id=travel_id)
-        form = TravelRecordForm(request.POST, instance=travel_record)
+        form = TravelRecordForm(request.POST, request.FILES, instance=travel_record)
         if form.is_valid():
             form.save()
             return redirect('travel_detail', travel_id=travel_record.id)
