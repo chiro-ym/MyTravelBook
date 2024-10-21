@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from app.forms import SignupForm, LoginForm, UserEditForm, CustomPasswordChangeForm, TravelRecordForm, PhotoForm
+from app.forms import SignupForm, LoginForm, UserEditForm, CustomPasswordChangeForm, TravelRecordForm, PhotoForm, CommentForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -207,7 +207,6 @@ class CategoryDetailView(View):
             'photos': photos,
             'categories': categories, 
         })
-
         
 @method_decorator(login_required, name='dispatch')
 class CategoryAddView(View):
@@ -269,3 +268,16 @@ def add_photo(request, category_id):
         'form': form,
         'category': category
     })
+    
+@login_required
+def edit_comment(request, travel_id, category_id):
+    category = get_object_or_404(Category, id=category_id)
+
+    if request.method == 'POST':
+        category.category_comment = request.POST.get('category_comment', '')
+        category.save()
+        return redirect('category_detail', travel_id=travel_id, category_id=category_id)
+
+    return render(request, 'edit_comment.html', context={
+        'category': category
+        })

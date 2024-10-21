@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
-from app.models import User, TravelRecord, Prefecture, Photo
+from app.models import User, TravelRecord, Prefecture, Photo,Category
 
 class SignupForm(UserCreationForm):
     class Meta:
@@ -170,4 +170,9 @@ class PhotoForm(forms.ModelForm):
     class Meta:
         model = Photo
         fields = ['photo_url']
+        
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['category_comment']
         
