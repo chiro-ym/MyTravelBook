@@ -1,7 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
-from app.models import User, Prefecture
-from .models import TravelRecord
+from app.models import User, TravelRecord, Prefecture, Photo
 
 class SignupForm(UserCreationForm):
     class Meta:
@@ -166,3 +165,9 @@ for pref_name in prefectures:
         Prefecture.objects.create(name=pref_name)
     else:
         print(f"{pref_name}はすでに存在しています。")
+        
+class PhotoForm(forms.ModelForm):
+    class Meta:
+        model = Photo
+        fields = ['photo_url']
+        

@@ -1,3 +1,5 @@
+{% load static %}
+<! DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
@@ -74,12 +76,23 @@
     <div class="photo-list">
         {% for photo in photos %}
             <div>
-                <img src="{{ photo.photo_url }}" alt="写真">  <!-- 写真を表示 -->
+                {% if photo.photo_url %}
+                    <img src="{{ photo.photo_url.url }}" alt="写真">
+                {% else %}
+                    <div>写真がありません。</div>
+                {% endif %}
             </div>
         {% empty %}
-            <div>写真がありません。</div>  <!-- 写真がない場合のメッセージ -->
+            <div>写真がありません。</div>
         {% endfor %}
     </div>
+    
+    <form method="POST" action="{% url 'add_photo' category.id %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="id_photo_url">{{ form.photo_url.label }}</label>
+        <input type="file" name="photo_url" id="id_photo_url">
+        <button type="submit">写真を追加</button>
+    </form>
 
     <div class="comment-area">
         <h4>コメント</h4>

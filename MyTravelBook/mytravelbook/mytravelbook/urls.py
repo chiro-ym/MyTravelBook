@@ -26,8 +26,8 @@ urlpatterns = [
     path('travel_detail/<int:travel_id>/', TravelDetailView.as_view(), name="travel_detail"),
     path('category_detail/<int:travel_id>/category/<int:category_id>/', CategoryDetailView.as_view(), name="category_detail"),
     path('travel/<int:travel_id>/add_category/', CategoryAddView.as_view(), name='add_category'),
+    path('category/<int:category_id>/add_photo/', views.add_photo, name='add_photo'),
 ]
-
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from app.forms import SignupForm, LoginForm, UserEditForm, CustomPasswordChangeForm
+from app.forms import SignupForm, LoginForm, UserEditForm, CustomPasswordChangeForm, TravelRecordForm, PhotoForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -8,8 +8,7 @@ from django.contrib.auth.views import PasswordChangeView
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.urls import reverse_lazy
-from .forms import TravelRecordForm
-from .models import TravelRecord, Prefecture, Category
+from .models import TravelRecord, Prefecture, Category, Photo
 
 
 class TopView(View):
@@ -246,4 +245,27 @@ def travel_list(request):
         'travel_records': travel_records
         })
     
-
+@login_required
+def add_photo(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    travel_record = category.travel_record
+    
+    if request.method == 'POST':
+        print(request.FILES)
+        form = PhotoForm(request.POST, request.FILES)
+        
+        if form.is_valid():
+            photo = form.save(commit=False)
+            photo.category = category
+            photo.save()
+            print(photo.photo_url)
+            return redirect('category_detail',travel_id=category.travel_record.id, category_id=category.id)
+        print(form.errors)
+        
+    else:
+        form = PhotoForm()
+            
+    return render(request, 'add_photo.html',context={
+        'form': form,
+        'category': category
+    })
