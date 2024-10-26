@@ -308,8 +308,6 @@ class TravelMemoListView(View):
     def post(self, request, travel_record_id):
         travel_record = get_object_or_404(TravelRecord, id=travel_record_id)
         form = TravelMemoForm(request.POST, request.FILES)
-        
-        print(type(travel_record))
 
         if form.is_valid():
             travel_memo = form.save(commit=False)

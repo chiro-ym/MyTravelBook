@@ -25,7 +25,9 @@
             <div class="memo">
                 <p>{{ memo.memo_text }}</p>
                 <p>投稿日時: {{ memo.created_at }}</p>
-                <hr>
+                {% if memo.memo_photo_path %}
+                    <img src="{{ memo.memo_photo_path.url }}" alt="メモの画像" style="max-width: 300px;">
+                {% endif %}
             </div>
         {% endfor %}
     </div>
@@ -34,7 +36,7 @@
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit">メモを追加</button>
+            <button type="submit">送信</button>
         </form>
     </div>
     
