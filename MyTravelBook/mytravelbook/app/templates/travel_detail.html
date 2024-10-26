@@ -57,6 +57,8 @@
         {% if categories.count < 7 %}
         <li><a href="{% url 'add_category' travel_record.id %}">＋</a></li>
         {% endif %}
+
+        <li><a href="{% url 'travelmemo_list' travel_record.id %}">たびメモ</a></li>
     </ul>
 
     {% load static %}

@@ -94,7 +94,7 @@ class Photo(models.Model):
         return f"{self.category.category_name} - Photo"
     
 class TravelMemo(models.Model):
-    travel_record_id = models.ForeignKey(TravelRecord, on_delete=models.CASCADE)
+    travel_record = models.ForeignKey(TravelRecord, on_delete=models.CASCADE)
     memo_text = models.TextField(blank=True, null=True)
     memo_photo_path = models.ImageField(upload_to='memo_photos/', blank=True, null=True)
     audio_path = models.CharField(max_length=255, blank=True, null=True)

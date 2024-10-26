@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
-from app.models import User, TravelRecord, Prefecture, Photo,Category
+from app.models import User, TravelRecord, Prefecture, Photo, Category, TravelMemo
 
 class SignupForm(UserCreationForm):
     class Meta:
@@ -175,4 +175,14 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Category
         fields = ['category_comment']
+        
+class TravelMemoForm(forms.ModelForm):
+    class Meta:
+        model = TravelMemo
+        fields = ['memo_text', 'memo_photo_path', 'audio_path', 'memo_location']
+        widgets = {
+            'memo_text': forms.Textarea(attrs={'placeholder': 'ここにメモを入力してください'}),
+            'memo_photo_path': forms.ClearableFileInput(attrs={'class':'form-control'}),
+            'audio_path': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+        }
         

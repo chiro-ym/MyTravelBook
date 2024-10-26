@@ -2,7 +2,8 @@ from django.contrib import admin
 from django.urls import path
 from app.views import (TopView, SignupView, LoginView, LogoutView, HomeView,
                        MypageView, CustomPasswordChangeView, CustomPasswordChangeDoneView,
-                       TravelDetailView,CategoryDetailView, CategoryAddView, TravelEditView, TravelDeleteView,
+                       TravelDetailView, CategoryDetailView, CategoryAddView, TravelEditView,
+                       TravelDeleteView, TravelMemoListView
                        )
 from app import views
 from django.conf import settings
@@ -28,7 +29,8 @@ urlpatterns = [
     path('travel/<int:travel_id>/add_category/', CategoryAddView.as_view(), name='add_category'),
     path('category/<int:category_id>/add_photo/', views.add_photo, name='add_photo'),
     path('category/<int:travel_id>/category/<int:category_id>/photo/<int:photo_id>/delete/', views.delete_photo, name='delete_photo'),
-     path('travel/<int:travel_id>/category/<int:category_id>/edit_comment/', views.edit_comment, name='edit_comment'),
+    path('travel/<int:travel_id>/category/<int:category_id>/edit_comment/', views.edit_comment, name='edit_comment'),
+    path('travel_record/<int:travel_record_id>/memo/', TravelMemoListView.as_view(), name='travelmemo_list'),    
 ]
 
 if settings.DEBUG:

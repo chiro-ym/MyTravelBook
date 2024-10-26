@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from app.forms import SignupForm, LoginForm, UserEditForm, CustomPasswordChangeForm, TravelRecordForm, PhotoForm, CommentForm
+from app.forms import SignupForm, LoginForm, UserEditForm, CustomPasswordChangeForm, TravelRecordForm, PhotoForm, CommentForm, TravelMemoForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -8,7 +8,7 @@ from django.contrib.auth.views import PasswordChangeView
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.urls import reverse_lazy
-from .models import TravelRecord, Prefecture, Category, Photo
+from .models import TravelRecord, Prefecture, Category, Photo, TravelMemo
 
 
 class TopView(View):
@@ -291,3 +291,35 @@ def edit_comment(request, travel_id, category_id):
     return render(request, 'edit_comment.html', context={
         'category': category
         })
+    
+@method_decorator([login_required, never_cache], name='dispatch')
+class TravelMemoListView(View):
+    def get(self, request, travel_record_id):
+        travel_record = get_object_or_404(TravelRecord, id=travel_record_id)
+        memos = TravelMemo.objects.filter(travel_record_id=travel_record_id).order_by('created_at')
+        form = TravelMemoForm()
+        
+        return render(request, 'travelmemo_list.html', context={
+            'travel_record': travel_record,
+            'memos': memos,
+            'form': form
+        })
+        
+    def post(self, request, travel_record_id):
+        travel_record = get_object_or_404(TravelRecord, id=travel_record_id)
+        form = TravelMemoForm(request.POST, request.FILES)
+        
+        print(type(travel_record))
+
+        if form.is_valid():
+            travel_memo = form.save(commit=False)
+            travel_memo.travel_record = travel_record
+            travel_memo.save()
+            return redirect('travelmemo_list', travel_record_id=travel_record.id)
+        
+        memos = TravelMemo.objects.filter(travel_record=travel_record).order_by('created_at')
+        return render(request, 'travelmemo_list.html', context={
+            'travel_record': travel_record,
+            'memos': memos,
+            'form': form
+            })
