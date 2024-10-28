@@ -321,3 +321,10 @@ class TravelMemoListView(View):
             'memos': memos,
             'form': form
             })
+
+@login_required        
+def delete_memo(request, memo_id):
+    memo = get_object_or_404(TravelMemo, id=memo_id)
+    travel_record_id = memo.travel_record.id
+    memo.delete()
+    return redirect('travelmemo_list', travel_record_id=travel_record_id)

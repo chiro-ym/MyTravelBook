@@ -3,23 +3,21 @@
 {% block title %}MyTravelBook{% endblock %}
 
 {% block content %}
-<p>カテゴリの数: {{ categories.count }}</p>
-    <ul class="tabs">
-        <li><a href="{% url 'travel_detail' travel_record.id %}" class="active">旅行概要</a></li>
-       
-        {% for category in categories %}
-            <li>
-                <a href="{% url 'category_detail' travel_record.id category.id %}">{{ category.category_name }}</a>
-            </li>
-        {% endfor %}
+<ul class="tabs">
+    <li><a href="{% url 'travel_detail' travel_record.id %}" class="active">旅行概要</a></li>
+   
+    {% for category in categories %}
+        <li>
+            <a href="{% url 'category_detail' travel_record.id category.id %}">{{ category.category_name }}</a>
+        </li>
+    {% endfor %}
 
-        {% if categories.count < 7 %}
-        <li><a href="{% url 'add_category' travel_record.id %}">＋</a></li>
-        {% endif %}
+    {% if categories.count < 7 %}
+    <li><a href="{% url 'add_category' travel_record.id %}">＋</a></li>
+    {% endif %}
 
-        <li><a href="{% url 'travelmemo_list' travel_record.id %}">たびメモ</a></li>
-    </ul>
-
+    <li><a href="{% url 'travelmemo_list' travel_record.id %}">たびメモ</a></li>
+</ul>
     <div id="memo-list">
         {% for memo in memos %}
             <div class="memo">
@@ -30,7 +28,11 @@
                     <img src="{{ memo.memo_photo_path.url }}" alt="メモの画像" style="max-width: 300px;">
                 {% endif %}
 
-            </div>
+                <form action="{% url 'delete_memo' memo.id %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" onclick="return confirm('本当に削除しますか？')">削除</button>
+                </form>
+             </div>
         {% endfor %}
     </div>
 
@@ -64,5 +66,4 @@
             <button type="submit">送信</button>
         </form>
     </div>
-    
-    {% endblock %}
+{% endblock %}

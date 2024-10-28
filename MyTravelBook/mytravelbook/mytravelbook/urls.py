@@ -30,7 +30,8 @@ urlpatterns = [
     path('category/<int:category_id>/add_photo/', views.add_photo, name='add_photo'),
     path('category/<int:travel_id>/category/<int:category_id>/photo/<int:photo_id>/delete/', views.delete_photo, name='delete_photo'),
     path('travel/<int:travel_id>/category/<int:category_id>/edit_comment/', views.edit_comment, name='edit_comment'),
-    path('travel_record/<int:travel_record_id>/memo/', TravelMemoListView.as_view(), name='travelmemo_list'),    
+    path('travel_record/<int:travel_record_id>/memo/', TravelMemoListView.as_view(), name='travelmemo_list'),
+    path('memo/delete/<int:memo_id>/', views.delete_memo, name='delete_memo'),
 ]
 
 if settings.DEBUG:
