@@ -25,9 +25,11 @@
             <div class="memo">
                 <p>{{ memo.memo_text }}</p>
                 <p>投稿日時: {{ memo.created_at }}</p>
+                
                 {% if memo.memo_photo_path %}
                     <img src="{{ memo.memo_photo_path.url }}" alt="メモの画像" style="max-width: 300px;">
                 {% endif %}
+
             </div>
         {% endfor %}
     </div>
@@ -36,6 +38,29 @@
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.as_p }}
+
+            <!--音声入力ボタン -->
+            <button id="btn">音声入力</button>
+            <div id="content"></div>
+
+            <script>
+                const speech = new webkitSpeechRecognition()
+                speech.lang = 'ja-JP';
+
+                const btn = document.getElementById('btn');
+                const content = document.getElementById('content');
+
+                btn.addEventListener('click', function(){
+                    //音声認識をスタート
+                    speech.start(); 
+                });
+
+                speech.addEventListener('result' , function(e){
+                    console.log(e); 
+                })
+
+            </script>
+
             <button type="submit">送信</button>
         </form>
     </div>
