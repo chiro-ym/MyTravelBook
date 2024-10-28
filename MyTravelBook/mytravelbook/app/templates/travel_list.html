@@ -35,7 +35,7 @@
         {% for record in travel_records %}
         <li>
             <a href="{% url 'travel_detail' record.id %}">
-                {{ record.title }} ({{ record.start_date }} - {{ record.end_date }})
+                {{ record.title }} ({{ record.start_date|date:"Y年m月d日" }} - {{ record.end_date|date:"Y年m月d日" }})
             </a>
             {% if record.main_photo_url %}
                 <img src="{{ record.main_photo_url.url }}" alt="メイン画像" width="50" height="50">

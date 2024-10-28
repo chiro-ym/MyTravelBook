@@ -32,7 +32,8 @@ urlpatterns = [
     path('travel/<int:travel_id>/category/<int:category_id>/edit_comment/', views.edit_comment, name='edit_comment'),
     path('travel_record/<int:travel_record_id>/memo/', TravelMemoListView.as_view(), name='travelmemo_list'),
     path('memo/delete/<int:memo_id>/', views.delete_memo, name='delete_memo'),
-]
+    path('search/', views.search_travel_records, name='travel_search'), 
+    ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

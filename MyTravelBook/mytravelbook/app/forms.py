@@ -186,3 +186,7 @@ class TravelMemoForm(forms.ModelForm):
             'audio_path': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
         
+class TravelSearchForm(forms.Form):
+    keyword = forms.CharField(label="検索キーワード", required=False)
+    date_from = forms.DateField(label="開始日", required=False, widget=forms.DateInput(attrs={'type': 'date'}))
+    date_to = forms.DateField(label="終了日", required=False, widget=forms.DateInput(attrs={'type': 'date'}))

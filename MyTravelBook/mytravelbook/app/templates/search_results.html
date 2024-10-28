@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>検索結果</h2>
+
+<form method="get" action="{% url 'travel_search' %}">
+    {{ form.as_p }}
+    <button type="submit">検索</button>
+</form>
+
+<h3>検索結果一覧</h3>
+<ul>
+    {% for travel in results %}
+        <li>
+            {{ travel.title }} - 
+            {% if travel.start_date %}{{ travel.start_date|date:"Y年m月d日" }}{% else %}開始日未設定{% endif %} - 
+            {% if travel.end_date %}{{ travel.end_date|date:"Y年m月d日" }}{% else %}終了日未設定{% endif %} - 
+            <a href="{% url 'travel_detail' travel.id %}">詳細へ</a>
+        </li>
+    {% empty %}
+        <li>該当する旅行記録がありません。</li>
+    {% endfor %}
+</ul>
+{% endblock %}
+

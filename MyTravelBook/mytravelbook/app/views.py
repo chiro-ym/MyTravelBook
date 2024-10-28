@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from app.forms import SignupForm, LoginForm, UserEditForm, CustomPasswordChangeForm, TravelRecordForm, PhotoForm, CommentForm, TravelMemoForm
+from app.forms import (SignupForm, LoginForm, UserEditForm, 
+CustomPasswordChangeForm, TravelRecordForm, PhotoForm,
+TravelMemoForm, TravelSearchForm)
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -328,3 +330,27 @@ def delete_memo(request, memo_id):
     travel_record_id = memo.travel_record.id
     memo.delete()
     return redirect('travelmemo_list', travel_record_id=travel_record_id)
+
+@login_required 
+def search_travel_records(request):
+    form = TravelSearchForm(request.GET or None)
+    results = TravelRecord.objects.all()
+    
+    if form.is_valid():
+        keyword = form.cleaned_data.get('keyword')
+        date_from = form.cleaned_data.get('date_from')
+        date_to = form.cleaned_data.get('date_to')
+
+
+        if keyword:
+            results = results.filter(title__icontains=keyword)
+
+        if date_from:
+            results = results.filter(date__gte=date_from)
+        if date_to:
+            results = results.filter(date__lte=date_to)
+            
+    return render(request, 'search_results.html', context={
+        'form': form,
+        'results': results
+        })
