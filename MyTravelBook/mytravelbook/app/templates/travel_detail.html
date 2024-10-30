@@ -1,65 +1,9 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyTravelBook</title>
-    <style>
-        header{
-            display: flex;
-            align-items: center;
-            border-bottom: 1px solid grey;
-        }
-        .tabs{
-            display: flex;
-            list-style: none;
-            padding: 10px 0 0 0;
-            margin: 10px 0 0 0;
-        }
-        .tabs li {
-            margin-right: 20px;
-        }
-        .tabs a {
-            text-decoration: none;
-            padding: 10px;
-            border: 1px solid gray;
-            border-radius: 5px;
-        }
-        .tabs a.active{
-            background-color: lightblue;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <h1>
-            <a href="{% url 'home' %}" style="text-decoration: none; color: black;">MyTravelBook</a>
-        </h1>
-        <nav>
-            <ul>
-                <a href="{% url 'travel_list' %}">旅行一覧</a>
-                <input type="text" placeholder="検索バー">
-                <a href="{% url 'mypage' %}">マイページ</a>
-            </ul>
-        </nav>
-    </header>
+{% extends 'base.html' %}
 
-    <p>カテゴリの数: {{ categories.count }}</p>
-    <ul class="tabs">
-        <li><a href="{% url 'travel_detail' travel_record.id %}" class="active">旅行概要</a></li>
-       
-        {% for category in categories %}
-            <li>
-                <a href="{% url 'category_detail' travel_record.id category.id %}">{{ category.category_name }}</a>
-            </li>
-        {% endfor %}
+{% block title %}MyTravelBook{% endblock %}
 
-        {% if categories.count < 7 %}
-        <li><a href="{% url 'add_category' travel_record.id %}">＋</a></li>
-        {% endif %}
-
-        <li><a href="{% url 'travelmemo_list' travel_record.id %}">たびメモ</a></li>
-    </ul>
+{% block content %}
+{% include "base_tabs.html" with active_tab="travel_detail" %}
 
     {% load static %}
     <h3>タイトル：{{ travel_record.title }}</h3>
@@ -110,8 +54,6 @@
         <button type="submit" onclick="return confirm('本当に削除しますか？');">削除</button>
     </form>
 </div>
-
-</body>
-</html>
+{% endblock %}
 
     

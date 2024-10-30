@@ -1,35 +1,9 @@
-{% load static %}
-<! DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyTravelBook</title>
+{% extends 'base.html' %}
+
+{% block content %}
+    {% include 'base_tabs.html' %}
+    
     <style>
-        header {
-            display: flex;
-            align-items: center;
-            border-bottom: 1px solid grey;
-            padding: 10px 0; /* ヘッダーの上下のパディング */
-        }
-        .tabs {
-            display: flex;
-            list-style: none;
-            padding: 10px 0 0 0;
-            margin: 10px 0 0 0;
-        }
-        .tabs li {
-            margin-right: 20px;
-        }
-        .tabs a {
-            text-decoration: none;
-            padding: 10px;
-            border: 1px solid gray;
-            border-radius: 5px;
-        }
-        .tabs a.active {
-            background-color: lightblue;
-        }
         .photo-list {
             display: flex;
             flex-wrap: wrap; /* 写真を折り返し表示 */
@@ -44,37 +18,8 @@
             margin-top: 20px; /* コメント入力エリアの上のマージン */
         }
     </style>
-</head>
-<body>
-    <header>
-        <h1>
-            <a href="{% url 'home' %}" style="text-decoration: none; color: black;">MyTravelBook</a>
-        </h1>
-        <nav>
-            <ul>
-                <a href="{% url 'travel_list' %}">旅行一覧</a>
-                <input type="text" placeholder="検索バー">
-                <a href="{% url 'mypage' %}">マイページ</a>
-            </ul>
-        </nav>
-    </header>
 
-    <ul class="tabs">
-        <li><a href="{% url 'travel_detail' travel_record.id %}" class="active">旅行概要</a></li>
-        
-        {% for category in categories %}
-            <li>
-                <a href="{% url 'category_detail' travel_record.id category.id %}">{{ category.category_name }}</a>
-            </li>
-        {% endfor %}
-        
-        {% if categories.count < 7 %}
-        <li><a href="{% url 'add_category' travel_record.id %}">＋</a></li>
-        {% endif %}
-        
-        <li><a href="{% url 'travelmemo_list' travel_record.id %}">たびメモ</a></li>
-    </ul>
-
+    {% load static %}
     <div class="photo-list">
         {% for photo in photos %}
             <div>
@@ -133,6 +78,4 @@
         });
     </script>
     
-</body>
-</html>
-
+{% endblock %}

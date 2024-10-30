@@ -1,0 +1,38 @@
+/* タブのスタイル */
+.tabs {
+    list-style-type: none;  /* デフォルトのリストスタイルを解除 */
+    padding: 0;             /* デフォルトのパディングを解除 */
+    margin: 20px 0;        /* 上下に隙間を設定 */
+    display: flex;          /* タブを横並びにする */
+    justify-content: space-between; /* タブ間のスペースを均等に */
+}
+
+/* タブの項目スタイル */
+.tabs li {
+    flex: 1;                /* 各タブの幅を均等に */
+    text-align: center;     /* テキストを中央に配置 */
+    border: 1px solid #ccc; /* タブの枠線を追加 */
+    border-radius: 5px;     /* 角を丸める */
+    margin-right: 5px;      /* タブ間の隙間を設定 */
+}
+
+/* 最後のタブの右のマージンを削除 */
+.tabs li:last-child {
+    margin-right: 0;
+}
+
+/* タブのリンクスタイル */
+.tabs a {
+    display: block;         /* リンクをブロック要素に */
+    padding: 10px 0;       /* 上下のパディングを設定 */
+    text-decoration: none;  /* 下線を解除 */
+    color: #333;           /* テキストカラーを設定 */
+    background-color: #fff; /* 背景色を設定 */
+}
+
+/* アクティブなタブのスタイル */
+.tabs a.active {
+    font-weight: bold;      /* アクティブなタブを太字に */
+    border-bottom: 2px solid #007BFF; /* アクティブなタブの下に線を追加 */
+    background-color: #e7f1ff; /* アクティブなタブの背景色 */
+}

@@ -199,15 +199,17 @@ class CategoryDetailView(View):
     def get(self, request, travel_id, category_id):
         travel_record = get_object_or_404(TravelRecord, id=travel_id)
         category = get_object_or_404(Category, id=category_id)
-        
         photos = category.photo_set.all()
         categories = travel_record.category_set.all()
+        
+        active_tab = category_id 
         
         return render(request, 'category_detail.html', context={
             'travel_record': travel_record,
             'category':category,
             'photos': photos,
-            'categories': categories, 
+            'categories': categories,
+            'active_tab': active_tab,
         })
         
 @method_decorator(login_required, name='dispatch')
@@ -298,13 +300,19 @@ def edit_comment(request, travel_id, category_id):
 class TravelMemoListView(View):
     def get(self, request, travel_record_id):
         travel_record = get_object_or_404(TravelRecord, id=travel_record_id)
+        categories = Category.objects.filter(travel_record=travel_record)
+        
+        active_tab = 'memo'
+         
         memos = TravelMemo.objects.filter(travel_record_id=travel_record_id).order_by('created_at')
         form = TravelMemoForm()
         
         return render(request, 'travelmemo_list.html', context={
             'travel_record': travel_record,
             'memos': memos,
-            'form': form
+            'form': form,
+            'categories': categories,
+            'active_tab': active_tab, 
         })
         
     def post(self, request, travel_record_id):
