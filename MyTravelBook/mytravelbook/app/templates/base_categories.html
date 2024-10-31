@@ -1,0 +1,57 @@
+{% load static %}
+<div class="photo-list">
+    {% for photo in photos %}
+        <div>
+            {% if photo.photo_url %}
+                <img src="{{ photo.photo_url.url }}" alt="写真">
+                <form method="POST" action="{% url 'delete_photo' travel_record.id category.id photo.id %}">
+                    {% csrf_token %}
+                    <button type="submit">削除</button>
+                </form>
+            {% else %}
+                <div>写真がありません。</div>
+            {% endif %}
+        </div>
+    {% empty %}
+        <div>写真がありません。</div>
+    {% endfor %}
+</div>
+
+<form method="POST" action="{% url 'add_photo' category.id %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="id_photo_url">{{ form.photo_url.label }}</label>
+    <input type="file" name="photo_url" id="id_photo_url">
+    <button type="submit">写真を追加</button>
+</form>
+
+<div class="comment-area">
+    <p id="comment-display" style="display: block;">{{ category.category_comment|default:"自由にコメントを入力" }}</p>
+    <textarea id="comment-input" placeholder="コメントを入力" style="width: 100%; display: none;">{{ category.category_comment|default:"自由にコメントを入力" }}</textarea>
+    <button id="edit-button">編集</button> <!-- コメントを編集するボタン -->
+    <form id="comment-form" method="post" action="{% url 'edit_comment' travel_id=travel_record.id category_id=category.id %}" style="display: none;">
+        {% csrf_token %}
+        <textarea name="category_comment" id="category-comment" style="width: 100%; display: none;">{{ category.category_comment|default:"自由にコメントを入力" }}</textarea>
+        <input type="submit" value="保存" style="display: none;">
+    </form>
+</div>
+
+<script>
+    document.getElementById('edit-button').addEventListener('click', function() {
+        const displayArea = document.getElementById('comment-display');
+        const inputArea = document.getElementById('comment-input');
+        const form = document.getElementById('comment-form');
+        
+        // コメント表示を隠し、テキストエリアを表示
+        if (displayArea.style.display !== 'none') {
+            displayArea.style.display = 'none'; // コメント表示を隠す
+            inputArea.style.display = 'block'; // 入力エリアを表示
+            form.style.display = 'block'; // フォームを表示
+            // フォームのテキストエリアにも値を入れる
+            document.getElementById('category-comment').value = displayArea.textContent;
+        } else {
+            displayArea.style.display = 'block'; // コメント表示を再表示
+            inputArea.style.display = 'none'; // 入力エリアを隠す
+            form.style.display = 'none'; // フォームを隠す
+        }
+    });
+</script>

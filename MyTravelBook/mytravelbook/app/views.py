@@ -195,6 +195,7 @@ class CategoryDetailView(View):
     def get(self, request, travel_id, category_id):
         travel_record = get_object_or_404(TravelRecord, id=travel_id)
         category = get_object_or_404(Category, id=category_id)
+        
         photos = category.photo_set.all()
         categories = travel_record.category_set.all()
         
@@ -230,13 +231,39 @@ class CategoryAddView(View):
             })
         
         if category_name:
-            Category.objects.create(travel_record=travel_record, category_name=category_name)
-            return redirect('travel_detail', travel_id=travel_id)
+            new_category = Category.objects.create(
+                travel_record=travel_record,
+                category_name=category_name,
+                is_custom=True
+                )
+            return redirect('custom_category_detail', travel_id=travel_record.id, category_id=new_category.id)
         
         error_message = "カテゴリ名を入力してください"
         return render(request, 'add_category.html', context={
             'travel_record':travel_record,
             'error_message':error_message
+        })
+
+
+@method_decorator([login_required, never_cache], name='dispatch')
+class CustomCategoryDetailView(View):
+    def get(self, request, travel_id, category_id):
+        travel_record = get_object_or_404(TravelRecord, id=travel_id)
+        category = get_object_or_404(Category, id=category_id, travel_record=travel_record)
+        
+        photos = category.photo_set.all()
+        categories = travel_record.category_set.all()
+
+        current_tab = category.category_name
+        active_tab = str(category_id)  # カスタムカテゴリ用に設定
+
+        return render(request, 'custom_category_detail.html', context={
+            'travel_record': travel_record,
+            'category': category,
+            'photos': photos,
+            'categories': categories,
+            'active_tab': active_tab,
+            'current_tab': current_tab,  # パンくずリスト
         })
     
 @login_required
@@ -246,6 +273,43 @@ def travel_list(request):
         'travel_records': travel_records
         })
     
+@login_required
+def edit_category(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+
+    if request.method == 'POST':
+        if request.POST.get('action') == 'delete':
+            return delete_category(request, category.id)
+
+        # カテゴリ名を変更
+        category_name = request.POST.get('category_name', '').strip()
+
+        if category_name:
+            category.category_name = category_name
+            category.save()
+            # カスタムカテゴリ詳細ページにリダイレクト
+            return redirect('custom_category_detail', travel_id=category.travel_record.id, category_id=category.id)
+
+        error_message = "カテゴリ名を入力してください"
+        return render(request, 'edit_category.html', context={
+            'category': category,
+            'error_message': error_message
+        })
+
+    return render(request, 'edit_category.html', {'category': category})
+
+@login_required
+def delete_category(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+
+    if request.method == 'POST':
+        category.delete()
+        return redirect('travel_detail', travel_id=category.travel_record.id)  # 適宜リダイレクト先を調整
+
+    return render(request, 'confirm_delete.html', context={
+        'category': category
+    })
+      
 @login_required
 def add_photo(request, category_id):
     category = get_object_or_404(Category, id=category_id)

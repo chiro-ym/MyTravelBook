@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% include 'base_breadcrumb.html' %} <!-- パンくずリスト -->
+{% include 'base_tabs.html' %}
+
+<div style="display: flex; align-items: center; justify-content: space-between;">
+    <h3>{{ category.category_name }} custom</h3>
+    <div>
+        <a href="{% url 'edit_category' category.id %}" class="btn btn-primary">カテゴリ編集・削除</a>
+    </div>
+</div>
+
+{% include 'base_categories.html' %}
+
+{% endblock %}

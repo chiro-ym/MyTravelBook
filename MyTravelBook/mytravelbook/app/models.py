@@ -77,6 +77,7 @@ class Category(models.Model):
     travel_record = models.ForeignKey(TravelRecord, on_delete=models.CASCADE)
     category_name = models.CharField(max_length=50)
     category_comment = models.TextField(blank=True, null=True)
+    is_custom = models.BooleanField(default=False)#カスタムカテゴリ
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
