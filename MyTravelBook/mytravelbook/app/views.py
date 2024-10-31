@@ -279,7 +279,8 @@ def edit_category(request, category_id):
 
     if request.method == 'POST':
         if request.POST.get('action') == 'delete':
-            return delete_category(request, category.id)
+            category.delete()  # カテゴリを削除
+            return redirect('travel_detail', travel_id=category.travel_record.id)
 
         # カテゴリ名を変更
         category_name = request.POST.get('category_name', '').strip()
@@ -287,7 +288,6 @@ def edit_category(request, category_id):
         if category_name:
             category.category_name = category_name
             category.save()
-            # カスタムカテゴリ詳細ページにリダイレクト
             return redirect('custom_category_detail', travel_id=category.travel_record.id, category_id=category.id)
 
         error_message = "カテゴリ名を入力してください"
@@ -296,20 +296,8 @@ def edit_category(request, category_id):
             'error_message': error_message
         })
 
-    return render(request, 'edit_category.html', {'category': category})
+    return render(request, 'edit_category.html', {'category': category})      
 
-@login_required
-def delete_category(request, category_id):
-    category = get_object_or_404(Category, id=category_id)
-
-    if request.method == 'POST':
-        category.delete()
-        return redirect('travel_detail', travel_id=category.travel_record.id)  # 適宜リダイレクト先を調整
-
-    return render(request, 'confirm_delete.html', context={
-        'category': category
-    })
-      
 @login_required
 def add_photo(request, category_id):
     category = get_object_or_404(Category, id=category_id)

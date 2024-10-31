@@ -61,3 +61,28 @@
     font-weight: normal;  /* 太字を解除 */
     color: #333;;
 }
+
+/* ボタンの基本スタイル */
+.button {
+    background-color: #007bff; /* 青色 */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* 削除ボタン専用スタイル */
+.button-danger {
+    background-color: #dc3545; /* 赤色 */
+}
+
+.button-danger:hover {
+    background-color: #c82333; /* ホバー時の色 */
+}

@@ -4,13 +4,12 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>カテゴリ編集</title>
+    <title>MyTravelBook</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
 </head>
 <body>
     <div>
-        <h1>カテゴリ編集</h1>
-        <p>旅行記録＞旅行タイトル１＞＋</p>
+        <h3>カテゴリ編集</h3>
         <form method="post">
             {% csrf_token %}
             <label for="category_name">カテゴリ名:</label>
@@ -18,7 +17,7 @@
             <div>
                 <button type="button" onclick="history.back();">キャンセル</button>
                 <button type="submit" name="action" value="save">保存</button>
-                <button type="submit" name="action" value="delete" style="background-color: red; color: white;">カテゴリの削除</button>
+                <button type="submit" name="action" value="delete" style="background-color: red; color: white;" onclick="return confirm('本当に削除しますか？');">カテゴリの削除</button>
             </div>
         </form>
         {% if error_message %}
@@ -27,3 +26,6 @@
     </div>
 </body>
 </html>
+
+
+
