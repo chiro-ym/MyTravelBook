@@ -25,33 +25,26 @@
 </form>
 
 <div class="comment-area">
-    <p id="comment-display" style="display: block;">{{ category.category_comment|default:"自由にコメントを入力" }}</p>
-    <textarea id="comment-input" placeholder="コメントを入力" style="width: 100%; display: none;">{{ category.category_comment|default:"自由にコメントを入力" }}</textarea>
-    <button id="edit-button">編集</button> <!-- コメントを編集するボタン -->
+    <!-- コメント表示部分 -->
+    <p id="comment-display">{{ category.category_comment|default:"自由にコメントを入力" }}</p>
+
+    <!-- 編集フォーム -->
     <form id="comment-form" method="post" action="{% url 'edit_comment' travel_id=travel_record.id category_id=category.id %}" style="display: none;">
         {% csrf_token %}
-        <textarea name="category_comment" id="category-comment" style="width: 100%; display: none;">{{ category.category_comment|default:"自由にコメントを入力" }}</textarea>
-        <input type="submit" value="保存" style="display: none;">
+        <textarea name="category_comment" id="comment-input" style="width: 100%;">{{ category.category_comment }}</textarea>
+        <button type="submit">保存</button>
     </form>
+
+    <!-- 編集ボタン -->
+    <button id="edit-button">編集</button>
 </div>
 
 <script>
     document.getElementById('edit-button').addEventListener('click', function() {
-        const displayArea = document.getElementById('comment-display');
-        const inputArea = document.getElementById('comment-input');
-        const form = document.getElementById('comment-form');
-        
-        // コメント表示を隠し、テキストエリアを表示
-        if (displayArea.style.display !== 'none') {
-            displayArea.style.display = 'none'; // コメント表示を隠す
-            inputArea.style.display = 'block'; // 入力エリアを表示
-            form.style.display = 'block'; // フォームを表示
-            // フォームのテキストエリアにも値を入れる
-            document.getElementById('category-comment').value = displayArea.textContent;
-        } else {
-            displayArea.style.display = 'block'; // コメント表示を再表示
-            inputArea.style.display = 'none'; // 入力エリアを隠す
-            form.style.display = 'none'; // フォームを隠す
-        }
+        // 表示用コメントと編集用フォームの切り替え
+        document.getElementById('comment-display').style.display = 'none'; // コメント表示部分を隠す
+        document.getElementById('comment-form').style.display = 'block'; // 編集フォームを表示
+        this.style.display = 'none'; // 編集ボタンを隠す
     });
 </script>
+

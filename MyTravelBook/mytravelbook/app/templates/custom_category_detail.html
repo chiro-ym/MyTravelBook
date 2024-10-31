@@ -5,7 +5,7 @@
 {% include 'base_tabs.html' %}
 
 <div style="display: flex; align-items: center; justify-content: space-between;">
-    <h3>{{ category.category_name }} custom</h3>
+    <h3>{{ category.category_name }}</h3>
     <div>
         <a href="{% url 'edit_category' category.id %}" class="btn btn-primary">カテゴリ編集・削除</a>
     </div>

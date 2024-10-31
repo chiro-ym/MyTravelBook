@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from app.forms import (SignupForm, LoginForm, UserEditForm, 
 CustomPasswordChangeForm, TravelRecordForm, PhotoForm,
-TravelMemoForm, TravelSearchForm)
+TravelMemoForm, TravelSearchForm, CommentForm)
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -177,6 +177,7 @@ class TravelEditView(View):
         if form.is_valid():
             form.save()
             return redirect('travel_detail', travel_id=travel_record.id)
+        
         return render(request, 'travel_record_edit.html',context={
             'form':form,
             'travel_record': travel_record,
@@ -337,14 +338,34 @@ def delete_photo(request, travel_id, category_id, photo_id):
 def edit_comment(request, travel_id, category_id):
     category = get_object_or_404(Category, id=category_id)
 
-    if request.method == 'POST':
-        category.category_comment = request.POST.get('category_comment', '')
-        category.save()
-        return redirect('category_detail', travel_id=travel_id, category_id=category_id)
+@login_required
+@login_required
+def edit_comment(request, travel_id, category_id):
+    category = get_object_or_404(Category, id=category_id)
 
-    return render(request, 'edit_comment.html', context={
-        'category': category
-        })
+    if request.method == 'POST':
+        category_comment = request.POST.get('category_comment', '').strip()  # 空白を除去
+        print(f"Received comment: '{category_comment}'")  # デバッグ用
+        
+        if category_comment:  # コメントが空でない場合のみ保存
+            category.category_comment = category_comment
+            category.save()
+            print(f"Saved comment: '{category.category_comment}'")  # デバッグ用
+            
+            # カテゴリがカスタムか通常かに基づいてリダイレクト
+            if category.is_custom:
+                return redirect('custom_category_detail', travel_id=travel_id, category_id=category_id)
+            else:
+                return redirect('category_detail', travel_id=travel_id, category_id=category_id)
+
+    return render(request, 'category_detail.html', context={
+        'travel_record': get_object_or_404(TravelRecord, id=travel_id),
+        'category': category,
+        'photos': category.photo_set.all(),
+        'categories': category.travel_record.category_set.all(),
+        'active_tab': str(category_id),
+        'current_tab': category.category_name,  # パンくずリスト
+    })
     
 @method_decorator([login_required, never_cache], name='dispatch')
 class TravelMemoListView(View):
