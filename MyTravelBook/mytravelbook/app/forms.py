@@ -108,7 +108,7 @@ class CustomPasswordChangeForm(PasswordChangeForm):
 class TravelRecordForm(forms.ModelForm):
     title = forms.CharField(required=True, max_length=100, label="タイトル")
     prefecture = forms.ModelChoiceField(queryset=Prefecture.objects.all(), required=False, label="旅行場所")
-    city = forms.CharField(required=False, max_length=100,label="")
+    city = forms.CharField(required=False, max_length=100, label="都市名")
     start_date = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date'}), label="出発日")
     end_date = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date'}), label="帰宅日")
     main_photo_url = forms.ImageField(required=False, label="メイン写真")
@@ -118,38 +118,18 @@ class TravelRecordForm(forms.ModelForm):
     transport_info = forms.CharField(required=False, widget=forms.Textarea, label="交通情報")
     cost_info = forms.CharField(required=False, widget=forms.Textarea, label="旅行費用")    
     
-    comment = forms.CharField(
-        required=False, 
-        widget=forms.Textarea(attrs={'rows': 3, 'cols': 50}), 
-        label="コメント"
-    )
-
-    accommodation_info = forms.CharField(
-        required=False, 
-        widget=forms.Textarea(attrs={'rows': 3, 'cols': 50}), 
-        label="宿泊情報"
-    )
-    meal_info = forms.CharField(
-        required=False, 
-        widget=forms.Textarea(attrs={'rows': 3, 'cols': 50}), 
-        label="食事情報"
-    )
-    transport_info = forms.CharField(
-        required=False, 
-        widget=forms.Textarea(attrs={'rows': 3, 'cols': 50}), 
-        label="交通情報"
-    )
-    cost_info = forms.CharField(
-        required=False, 
-        widget=forms.Textarea(attrs={'rows': 3, 'cols': 50}), 
-        label="旅行費用"
-    )
-    
     class Meta:
         model = TravelRecord
         fields = ['title', 'start_date', 'end_date', 'prefecture', 'city', 'main_photo_url', 'comment',
                   'accommodation_info','meal_info', 'transport_info', 'cost_info']
-    
+    def save(self, commit=True):
+        travel_record = super().save(commit=False)
+        if not travel_record.main_photo_url:
+            travel_record.main_photo_url = 'photos/default.jpg'
+        if commit:
+            travel_record.save()
+        return travel_record
+# Prefectureのデータを作成
 prefectures = [
     '北海道', '青森県', '岩手県', '宮城県', '秋田県', '山形県', '福島県',
     '茨城県', '栃木県', '群馬県', '埼玉県', '千葉県', '東京都', '神奈川県',

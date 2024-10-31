@@ -113,16 +113,12 @@ def create_travel_record(request):
         if form.is_valid():
             travel_record = form.save(commit=False)
             travel_record.user = request.user
-            
-            if not travel_record.main_photo_url:
-                travel_record.main_photo_url = 'photos/default.jpg'
-            
             travel_record.save()
             messages.success(request, '旅行記録が正常に追加されました。') 
             return redirect('travel_detail',travel_record.id)
         else:
             messages.error(request, 'フォームにエラーがあります。再度お試しください。')
-            print(form.errors)
+            print(form.errors)  # ここでエラーを確認
     else:
         form = TravelRecordForm()
         
@@ -131,7 +127,6 @@ def create_travel_record(request):
         'form': form,
         'messages': messages.get_messages(request),
         'prefectures': prefectures
-        
         })
     
 @method_decorator([login_required, never_cache], name='dispatch')

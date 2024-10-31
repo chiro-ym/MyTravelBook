@@ -19,39 +19,40 @@
     
     <h4>コメント</h4>
     <p>{{ travel_record.comment }}</p>
+    <br>
 
     <details>
         <summary>旅行詳細</summary>
 
         <div>
-            <strong>宿泊情報:</strong>
-            <p>{{ travel_record.accommodation_info|default:"情報がありません" }}
+            <strong>宿泊情報：</strong>
+            <p>{{ travel_record.accommodation_info|default:"情報がありません" }}</p>
         </div>
 
         <div>
-            <strong>食事情報</strong>
-            <p>{{ travel_record.meal_info|default:"情報がありません" }}
+            <strong>食事情報：</strong>
+            <p>{{ travel_record.meal_info|default:"情報がありません" }}</p>
         </div>
 
         <div>
-            <strong>交通情報</strong>
-            <p>{{ travel_record.transport_info|default:"情報がありません" }}
+            <strong>交通情報：</strong>
+            <p>{{ travel_record.transport_info|default:"情報がありません" }}</p>
         </div>
 
         <div>
-            <strong>旅行費用</strong>
-            <p>{{ travel_record.cost_info|default:"情報がありません" }}
+            <strong>旅行費用：</strong>
+            <p>{{ travel_record.cost_info|default:"情報がありません" }}</p>
         </div>
     </details>
 
 <div>
     <form method="GET" action="{% url 'travel_record_edit' travel_record.id %}">
-        <button type="submit">編集</button>
+        <button type="submit" class="btn btn-primary">編集</button>
     </form>
 
     <form method="POST" action="{% url 'travel_record_delete' travel_record.id %}">
         {% csrf_token %}
-        <button type="submit" onclick="return confirm('本当に削除しますか？');">削除</button>
+        <button type="submit" class="btn btn-danger" onclick="return confirm('本当に削除しますか？');">削除</button>
     </form>
 </div>
 {% endblock %}
