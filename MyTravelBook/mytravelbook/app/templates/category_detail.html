@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% include 'base_tabs.html' %}
+{% include 'base_breadcrumb.html' %} <!-- パンくずリスト -->
+
+{% include 'base_tabs.html' %}
     
     <style>
         .photo-list {

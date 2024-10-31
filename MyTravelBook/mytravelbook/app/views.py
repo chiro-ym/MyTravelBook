@@ -157,6 +157,7 @@ class TravelDetailView(View):
             'categories': categories,
             'photos': photos,
             'custom_categories_count': categories.exclude(category_name__in=fixed_categories).count(),
+            'current_tab': '旅行概要',
         })
             
 @method_decorator([login_required, never_cache], name='dispatch')
@@ -197,6 +198,8 @@ class CategoryDetailView(View):
         photos = category.photo_set.all()
         categories = travel_record.category_set.all()
         
+        current_tab = category.category_name
+        
         active_tab = str(category_id) 
         
         return render(request, 'category_detail.html', context={
@@ -205,6 +208,7 @@ class CategoryDetailView(View):
             'photos': photos,
             'categories': categories,
             'active_tab': active_tab,
+            'current_tab': current_tab,#パンくずリスト
         })
         
 @method_decorator(login_required, name='dispatch')
@@ -296,6 +300,7 @@ class TravelMemoListView(View):
         travel_record = get_object_or_404(TravelRecord, id=travel_record_id)
         categories = Category.objects.filter(travel_record=travel_record)
         
+        current_tab = 'たびメモ'#パンくずリスト
         active_tab = 'memo'
          
         memos = TravelMemo.objects.filter(travel_record_id=travel_record_id).order_by('created_at')
@@ -307,6 +312,7 @@ class TravelMemoListView(View):
             'form': form,
             'categories': categories,
             'active_tab': active_tab, 
+            'current_tab': current_tab,
         })
         
     def post(self, request, travel_record_id):

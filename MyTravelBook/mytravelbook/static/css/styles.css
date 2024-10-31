@@ -36,3 +36,28 @@
     border-bottom: 2px solid #007BFF; /* アクティブなタブの下に線を追加 */
     background-color: #e7f1ff; /* アクティブなタブの背景色 */
 }
+
+/* パンくずリストのスタイル */
+.breadcrumb {
+    display: flex;            /* 横並びに配置 */
+    list-style: none;        /* デフォルトのリストスタイルを解除 */
+    padding: 0;              /* デフォルトのパディングを解除 */
+    margin: 20px 0;          /* 上下に隙間を設定 */
+}
+
+/* パンくずリストの項目スタイル */
+.breadcrumb-item {
+    margin-right: 5px;       /* 項目間の隙間を設定 */
+}
+
+/* パンくずリストの区切り文字スタイル */
+.breadcrumb-item + .breadcrumb-item::before {
+    content: " ＞ ";          /* 区切り文字を設定 */
+    color: #333;              /* 区切り文字の色を調整 */
+}
+
+/* アクティブな項目のスタイル（デフォルトでリンクを除去する） */
+.breadcrumb-item.active {
+    font-weight: normal;  /* 太字を解除 */
+    color: #333;;
+}

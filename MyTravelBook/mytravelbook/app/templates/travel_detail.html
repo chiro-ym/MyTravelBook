@@ -3,7 +3,11 @@
 {% block title %}MyTravelBook{% endblock %}
 
 {% block content %}
-{% include "base_tabs.html" with active_tab="travel_detail" %}
+{% load static %}
+
+{% include 'base_breadcrumb.html' %}  <!-- パンくずリストを追加 -->
+
+{% include "base_tabs.html" with active_tab="travel_detail" %}<!-- タブを表示 -->
 
     {% load static %}
     <h3>タイトル：{{ travel_record.title }}</h3>
