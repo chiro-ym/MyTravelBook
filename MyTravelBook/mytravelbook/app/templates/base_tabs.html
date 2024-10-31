@@ -11,19 +11,19 @@
 
     <ul class="tabs">
         <li><a href="{% url 'travel_detail' travel_record.id %}" class="{% if active_tab == 'travel_detail' %}active{% endif %}">旅行概要</a></li>
-       
-        {% for category in categories %}
-            <li>
-                <a href="{% url 'category_detail' travel_record.id category.id %}" class="{% if active_tab == category.id %}active{% endif %}">{{ category.category_name }}</a>
-            </li>
-        {% endfor %}
 
-        {% if categories|length < 7 %}
-            <li><a href="{% url 'add_category' travel_record.id %}">＋</a></li>
-        {% endif %}
+    {% for category in categories %}
+        <li>
+            <a href="{% url 'category_detail' travel_record.id category.id %}" class="{% if active_tab == category.id|stringformat:"s" %}active{% endif %}">{{ category.category_name }}</a>
+        </li>
+    {% endfor %}
 
-        <li><a href="{% url 'travelmemo_list' travel_record.id %}" class="{% if active_tab == 'travelmemo' %}active{% endif %}">たびメモ</a></li>
-    </ul>
+    {% if categories|length < 7 %}
+        <li><a href="{% url 'add_category' travel_record.id %}">＋</a></li>
+    {% endif %}
+
+    <li><a href="{% url 'travelmemo_list' travel_record.id %}" class="{% if active_tab == 'travelmemo' %}active{% endif %}">たびメモ</a></li>
+</ul>
 
 </body>
 </html>

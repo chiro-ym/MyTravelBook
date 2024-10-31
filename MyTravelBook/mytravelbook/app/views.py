@@ -202,7 +202,7 @@ class CategoryDetailView(View):
         photos = category.photo_set.all()
         categories = travel_record.category_set.all()
         
-        active_tab = category_id 
+        active_tab = str(category_id) 
         
         return render(request, 'category_detail.html', context={
             'travel_record': travel_record,
@@ -221,14 +221,13 @@ class CategoryAddView(View):
     def post(self, request, travel_id):
         travel_record = get_object_or_404(TravelRecord, id=travel_id)
         category_name = request.POST.get('category_name')
+        current_category_count = travel_record.category_set.exclude(category_name__in=['観光', '食べる', '宿泊']).count()
         
-        user_added_categories = travel_record.category_set.exclude(category_name__in=['観光', '食べる', '宿泊'])
-        
-        if travel_record.category_set.count() >= 2:
+        if current_category_count >= 2:
             error_message = "カテゴリは2つまでしか追加できません"
-            return render(request, 'add_category.html',context={
+            return render(request, 'add_category.html', context={
                 'travel_record': travel_record,
-                'error_message': error_message
+                'error_message': error_message,
             })
         
         if category_name:
