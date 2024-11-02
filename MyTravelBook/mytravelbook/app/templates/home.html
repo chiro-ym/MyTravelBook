@@ -1,6 +1,30 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+{% endblock %}
 
 {% block content %}
     <h2>ホームページ</h2>
     <a href="{% url 'create_travel_record' %}">旅行を記録</a>
+
+    <!-- 最近の旅行セクション -->
+    <h2>最近の旅行</h2>
+    <div class="recent-travels">
+        {% for travel in recent_travels %}
+            <div class="travel-item">
+                <a href="{% url 'travel_detail' travel.id %}">
+                    <!-- メイン写真を表示 -->
+                    {% if travel.main_photo_url %}
+                        <img src="{{ travel.main_photo_url.url }}" alt="{{ travel.title }}">
+                    {% else %}
+                        <img src="{% static 'photos/default.jpg' %}" alt="Default Image">
+                    {% endif %}
+                    <!-- タイトルを表示 -->
+                    <h3>{{ travel.title }}</h3>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

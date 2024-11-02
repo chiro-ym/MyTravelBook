@@ -6,80 +6,44 @@
 {% include 'base_breadcrumb.html' %} <!-- パンくずリスト -->
 
 {% include "base_tabs.html" with active_tab="travelmemo" %} 
-    <div id="memo-list">
-        {% for memo in memos %}
-            <div class="memo">
-                <p>{{ memo.memo_text }}</p>
-                <p>投稿日時: {{ memo.created_at }}</p>
-                
-                {% if memo.memo_photo_path %}
-                    <img src="{{ memo.memo_photo_path.url }}" alt="メモの画像" style="max-width: 300px;">
-                {% endif %}
 
-                <form action="{% url 'delete_memo' memo.id %}" method="post" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit" onclick="return confirm('本当に削除しますか？')">削除</button>
-                </form>
-             </div>
-        {% endfor %}
-    </div>
+<div id="memo-list">
+    {% for memo in memos %}
+        <div class="memo">
+            <p>{{ memo.memo_text }}</p>
+            <p>投稿日時: {{ memo.created_at }}</p>
+            
+            {% if memo.memo_photo_path %}
+                <img src="{{ memo.memo_photo_path.url }}" alt="メモの画像" style="max-width: 300px;">
+            {% endif %}
 
-    <div id="memo-form">
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_p }}
+            <form action="{% url 'delete_memo' memo.id %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" onclick="return confirm('本当に削除しますか？')">削除</button>
+            </form>
+         </div>
+    {% endfor %}
+</div>
 
-            <!--音声入力ボタン -->
-            <button id="btn">音声入力</button>
-            <div id="content"></div>
+<div id="memo-form">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
 
-            <input type="hidden" id="memo_text" name="memo_text">
+        <!-- 音声入力ボタン -->
+        <button type="button" id="btn">音声入力</button>
+        <div id="content"></div>
 
-            <script>
-                if (!window.webkitSpeechRecognition) {
-                    console.log("音声認識はこのブラウザでサポートされていません");
-                    alert("このブラウザでは音声認識がサポートされていない可能性があります。");
-                } else {
-                    console.log("音声認識がサポートされています");
-                }
-                    document.addEventListener('DOMContentLoaded', function() {
-                    console.log('JavaScriptは読み込まれています');
-                });
+        <!-- `memo_text`フィールドを`textarea`に変更 -->
+        <textarea id="memo_text" name="memo_text" placeholder="ここにメモを入力してください"></textarea>
 
-                const speech = new webkitSpeechRecognition()
-                speech.lang = 'ja-JP';
-                speech.interimResults = true;  // 途中結果も取得可能にする
-                speech.continuous = false;  // 継続的な認識をオフに
+        <button type="submit">送信</button>
+    </form>
+</div>
 
-                const btn = document.getElementById('btn');
-                const content = document.getElementById('content');
-                const memoTextInput = document.getElementById('memo_text');
+<!-- 外部JavaScriptファイルの読み込み -->
+{% load static %}
+<script src="{% static 'js/speechRecognition.js' %}"></script>
 
-                btn.addEventListener('click', function(){
-                    console.log('音声入力が開始されました');
-                    speech.start(); //音声認識をスタート
-                });
-
-                speech.addEventListener('result' , function(e){
-                    console.log('音声認識が稼働中');
-                    const transcript = e.results[0][0].transcript;
-                    content.textContent = transcript;
-                    memoTextInput.value = transcript;
-                });
-
-                // エラーイベントを追加して原因を確認する
-                speech.addEventListener('error', function(e) {
-                    console.error("エラーが発生しました:", e.error); // コンソールにエラー情報を出力
-                    alert("音声認識のエラーが発生しました。マイクの設定をご確認ください。");
-                });
-
-                // 結果取得前にすぐ停止してしまう場合のため、endイベントを監視
-                speech.addEventListener('end', function() {
-                    console.log("音声認識が終了しました");
-                });
-            </script>
-
-            <button type="submit">送信</button>
-        </form>
-    </div>
 {% endblock %}
+

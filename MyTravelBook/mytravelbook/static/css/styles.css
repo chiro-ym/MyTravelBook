@@ -86,3 +86,26 @@
 .button-danger:hover {
     background-color: #c82333; /* ホバー時の色 */
 }
+
+.recent-travels {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin: 20px 0;
+}
+
+.travel-item {
+    margin: 5px;
+    flex: 0 1 auto;
+    text-align: center;
+}
+
+.travel-item img {
+    width: 150px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+
+

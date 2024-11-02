@@ -104,7 +104,10 @@ class MypageView(View):
 @method_decorator([login_required, never_cache], name='dispatch')
 class HomeView(View):
     def get(self, request):
-        return render(request, "home.html")
+        recent_travels = TravelRecord.objects.filter(user=request.user).order_by('-created_at')[:3]
+        return render(request, "home.html", context={
+            'recent_travels': recent_travels
+        })
     
 @login_required
 def create_travel_record(request):
@@ -435,3 +438,4 @@ def search_travel_records(request):
         'form': form,
         'results': results
         })
+    
