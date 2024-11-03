@@ -100,6 +100,8 @@ class TravelMemo(models.Model):
     audio_path = models.CharField(max_length=255, blank=True, null=True)
     audio_transcript = models.TextField(blank=True, null=True)
     memo_location = models.CharField(max_length=255, blank=True, null=True)
+    latitude = models.FloatField(null=True, blank=True)  # 緯度
+    longitude = models.FloatField(null=True, blank=True) # 経度
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
