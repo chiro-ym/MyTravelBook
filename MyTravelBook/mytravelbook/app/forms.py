@@ -107,10 +107,20 @@ class CustomPasswordChangeForm(PasswordChangeForm):
 
 class TravelRecordForm(forms.ModelForm):
     title = forms.CharField(required=True, max_length=100, label="タイトル")
-    prefecture = forms.ModelChoiceField(queryset=Prefecture.objects.all(), required=False, label="旅行場所")
+    prefecture = forms.ModelChoiceField(
+        queryset=Prefecture.objects.all(),
+        required=False,
+        label="旅行場所",
+        empty_label="選択しない")
     city = forms.CharField(required=False, max_length=100, label="都市名")
-    start_date = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date'}), label="出発日")
-    end_date = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date'}), label="帰宅日")
+    start_date = forms.DateField(
+        required=False,
+        widget=forms.DateInput(attrs={'type': 'date'}),
+        label="出発日")
+    end_date = forms.DateField(
+        required=False, 
+        widget=forms.DateInput(attrs={'type': 'date'}),
+        label="帰宅日")
     main_photo_url = forms.ImageField(required=False, label="メイン写真")
     comment = forms.CharField(required=False, widget=forms.Textarea, label="コメント")
     accommodation_info = forms.CharField(required=False, widget=forms.Textarea, label="宿泊情報")
@@ -122,6 +132,7 @@ class TravelRecordForm(forms.ModelForm):
         model = TravelRecord
         fields = ['title', 'start_date', 'end_date', 'prefecture', 'city', 'main_photo_url', 'comment',
                   'accommodation_info','meal_info', 'transport_info', 'cost_info']
+    
     def save(self, commit=True):
         travel_record = super().save(commit=False)
         if not travel_record.main_photo_url:

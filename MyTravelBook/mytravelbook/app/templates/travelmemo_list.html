@@ -38,12 +38,18 @@
         <textarea id="memo_text" name="memo_text" placeholder="ここにメモを入力してください"></textarea>
 
         <button type="submit">送信</button>
+
+        <!-- 音声録音のボタン -->
+        <button id="record-btn">録音開始</button>
+        <button id="stop-btn" disabled>録音停止</button>
+        <audio id="audio-playback" controls></audio>    
     </form>
 </div>
 
 <!-- 外部JavaScriptファイルの読み込み -->
 {% load static %}
 <script src="{% static 'js/speechRecognition.js' %}"></script>
+<script src="{% static 'js/audioRecorder.js' %}"></script>
 
 {% endblock %}
 
