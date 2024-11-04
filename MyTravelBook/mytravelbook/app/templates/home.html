@@ -9,6 +9,24 @@
     <h2>ホームページ</h2>
     <a href="{% url 'create_travel_record' %}">旅行を記録</a>
 
+    <button id="rouletteButton">ルーレットを回す</button>
+    <p id="nextPrefecture">次の旅行先は…</p>
+
+    <script>
+    document.getElementById("rouletteButton").addEventListener("click", function() {
+        fetch("/roulette/")
+        .then(response => response.json())
+        .then(data => {
+            if (data.prefecture) {
+                document.getElementById("nextPrefecture").textContent = "次の旅行先は " + data.prefecture;
+            } else {
+                document.getElementById("nextPrefecture").textContent = "未訪問の都道府県がありません";
+            }
+        });
+    });
+    </script>
+
+
     <!-- 最近の旅行セクション -->
     <h2>最近の旅行</h2>
     <div class="recent-travels">

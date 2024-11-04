@@ -11,7 +11,8 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.urls import reverse_lazy
 from .models import TravelRecord, Prefecture, Category, Photo, TravelMemo
-
+import random
+from django.http import JsonResponse
 
 class TopView(View):
     def get(self, request):
@@ -121,7 +122,7 @@ def create_travel_record(request):
             return redirect('travel_detail',travel_record.id)
         else:
             messages.error(request, 'フォームにエラーがあります。再度お試しください。')
-            print(form.errors)  # ここでエラーを確認
+            print(form.errors)  #デバック用
     else:
         form = TravelRecordForm()
         
@@ -424,8 +425,7 @@ def search_travel_records(request):
         keyword = form.cleaned_data.get('keyword')
         date_from = form.cleaned_data.get('date_from')
         date_to = form.cleaned_data.get('date_to')
-
-
+        
         if keyword:
             results = results.filter(title__icontains=keyword)
 
@@ -439,3 +439,22 @@ def search_travel_records(request):
         'results': results
         })
     
+def get_random_unvisited_prefecture(user):
+    # 訪問済みの都道府県を取得
+    visited_prefectures = TravelRecord.objects.filter(user=user).values_list('prefecture', flat=True)
+    print("Visited prefectures:", visited_prefectures)  # デバッグ用
+    # 未訪問の都道府県を取得
+    unvisited_prefectures = Prefecture.objects.exclude(id__in=visited_prefectures)
+    
+    if unvisited_prefectures.exists():
+        return random.choice(unvisited_prefectures)
+    return None
+
+@login_required
+def roulette_view(request):
+    prefecture = get_random_unvisited_prefecture(request.user)
+    if prefecture:
+        print("Selected prefecture:", prefecture)  # デバッグ用
+        return JsonResponse({'prefecture': prefecture.name})
+    else:
+        return JsonResponse({'error': '未訪問の都道府県がありません'})

@@ -35,6 +35,7 @@ urlpatterns = [
     path('memo/delete/<int:memo_id>/', views.delete_memo, name='delete_memo'),
     path('search/', views.search_travel_records, name='travel_search'), 
     path('edit_category/<int:category_id>/', views.edit_category, name='edit_category'),
+    path('roulette/', views.roulette_view, name='roulette'),
 ]
 
 if settings.DEBUG:
