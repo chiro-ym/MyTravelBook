@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 
+{% load static %}
+
 {% block title %}MyTravelBook{% endblock %}
 
 {% block content %}
 {% include 'base_breadcrumb.html' %} <!-- パンくずリスト -->
 
-{% include "base_tabs.html" with active_tab="travelmemo" %} 
+{% include "base_tabs.html" with active_tab="travelmemo" %} <!-- タブ -->
 
 <div id="memo-list">
     {% for memo in memos %}
@@ -37,19 +39,18 @@
         <!-- `memo_text`フィールドを`textarea`に変更 -->
         <textarea id="memo_text" name="memo_text" placeholder="ここにメモを入力してください"></textarea>
 
-        <button type="submit">送信</button>
-
         <!-- 音声録音のボタン -->
-        <button id="record-btn">録音開始</button>
-        <button id="stop-btn" disabled>録音停止</button>
+        <button type="button" id="record-btn">録音開始</button>
+        <button type="button" id="stop-btn" disabled>録音停止</button>
         <audio id="audio-playback" controls></audio>    
+
+        <input type="hidden" name="audio_data" id="audio-data">
+        <button type="submit" id="submit-btn" disabled>送信</button>
     </form>
 </div>
 
 <!-- 外部JavaScriptファイルの読み込み -->
-{% load static %}
 <script src="{% static 'js/speechRecognition.js' %}"></script>
 <script src="{% static 'js/audioRecorder.js' %}"></script>
-
 {% endblock %}
 

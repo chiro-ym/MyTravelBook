@@ -1,53 +1,56 @@
 document.addEventListener('DOMContentLoaded', function() {
     let mediaRecorder;
     let audioChunks = [];
+    let stream;
 
     const recordBtn = document.getElementById('record-btn');
     const stopBtn = document.getElementById('stop-btn');
     const audioPlayback = document.getElementById('audio-playback');
+    const audioDataInput = document.getElementById('audio-data');
+    const submitBtn = document.getElementById('submit-btn');
 
-    // 録音開始ボタンのイベントリスナー
     recordBtn.addEventListener('click', async () => {
-        try {
-            // マイクの使用許可を求める
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            mediaRecorder = new MediaRecorder(stream);
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            alert("このブラウザは音声録音をサポートしていません");
+            return;
+        }
 
-            // 録音データを格納する配列をリセット
+        try {
+            stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
             audioChunks = [];
 
-            // 音声データが得られるたびに配列に追加
             mediaRecorder.addEventListener('dataavailable', event => {
                 audioChunks.push(event.data);
             });
 
-            // 録音終了時に音声データをBlobとして作成し、再生可能にする
             mediaRecorder.addEventListener('stop', () => {
                 const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
                 const audioUrl = URL.createObjectURL(audioBlob);
                 audioPlayback.src = audioUrl;
 
-                // ここで音声ファイルをサーバーに送信する処理も追加可能
-                // 例: sendAudioToServer(audioBlob);
+                // 音声データをBase64に変換してフォームに追加
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    audioDataInput.value = reader.result; // Base64データをセット
+                    submitBtn.disabled = false; // 録音完了後に送信ボタンを有効にする
+                };
+                reader.readAsDataURL(audioBlob); // Base64エンコード
             });
 
             mediaRecorder.start();
             recordBtn.disabled = true;
-            stopBtn.disabled = false;
-            console.log("録音を開始しました");
+            stopBtn.disabled = false;   
         } catch (error) {
-            console.error("録音エラー:", error);
             alert("マイクのアクセスに失敗しました。設定をご確認ください。");
         }
     });
 
-    // 録音停止ボタンのイベントリスナー
     stopBtn.addEventListener('click', () => {
         if (mediaRecorder && mediaRecorder.state !== "inactive") {
             mediaRecorder.stop();
             recordBtn.disabled = false;
             stopBtn.disabled = true;
-            console.log("録音を停止しました");
         }
     });
 });
