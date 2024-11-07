@@ -8,9 +8,14 @@
 {% block content %}
     <h2>ホームページ</h2>
     <a href="{% url 'create_travel_record' %}">旅行を記録</a>
-
-    <button id="rouletteButton">ルーレットを回す</button>
+    {% if latest_travel_record_id %}
+        <a href="{% url 'travelmemo_list' latest_travel_record_id %}">たびメモ</a>
+    {% else %}
+    <p>たびメモはまだありません</p>
+    {% endif %}
+    
     <p id="nextPrefecture">次の旅行先は…</p>
+    <button id="rouletteButton">ルーレットを回す</button>
 
     <script>
     document.getElementById("rouletteButton").addEventListener("click", function() {

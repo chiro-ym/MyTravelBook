@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from app.forms import (SignupForm, LoginForm, UserEditForm, 
 CustomPasswordChangeForm, TravelRecordForm, PhotoForm,
-TravelMemoForm, TravelSearchForm, CommentForm)
+TravelMemoForm, TravelSearchForm)
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -107,9 +107,15 @@ class MypageView(View):
 class HomeView(View):
     def get(self, request):
         recent_travels = TravelRecord.objects.filter(user=request.user).order_by('-created_at')[:3]
+       
+        latest_memo = TravelMemo.objects.order_by('-updated_at').first()
+        latest_travel_record_id = latest_memo.travel_record.id if latest_memo else None
+        
         return render(request, "home.html", context={
-            'recent_travels': recent_travels
+            'recent_travels': recent_travels,
+            'latest_travel_record_id': latest_travel_record_id, 
         })
+        
     
 @login_required
 def create_travel_record(request):
@@ -343,7 +349,6 @@ def delete_photo(request, travel_id, category_id, photo_id):
 def edit_comment(request, travel_id, category_id):
     category = get_object_or_404(Category, id=category_id)
 
-@login_required
 @login_required
 def edit_comment(request, travel_id, category_id):
     category = get_object_or_404(Category, id=category_id)

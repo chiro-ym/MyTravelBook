@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             mediaRecorder.addEventListener('dataavailable', event => {
                 audioChunks.push(event.data);
+                console.log("Data chunk added:", event.data);  // デバッグ用: データ取得を確認
             });
 
             mediaRecorder.addEventListener('stop', () => {
@@ -29,20 +30,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 const audioUrl = URL.createObjectURL(audioBlob);
                 audioPlayback.src = audioUrl;
 
+                console.log("Audio blob created:", audioBlob);  // デバッグ用: Blob作成を確認
+
                 // 音声データをBase64に変換してフォームに追加
                 const reader = new FileReader();
                 reader.onloadend = () => {
                     audioDataInput.value = reader.result; // Base64データをセット
                     submitBtn.disabled = false; // 録音完了後に送信ボタンを有効にする
+                    console.log("Base64 audio data set:", reader.result);  // デバッグ用: Base64データを確認
                 };
                 reader.readAsDataURL(audioBlob); // Base64エンコード
             });
 
             mediaRecorder.start();
+            console.log("Recording started...");  // デバッグ用: 録音開始を確認
             recordBtn.disabled = true;
             stopBtn.disabled = false;   
         } catch (error) {
             alert("マイクのアクセスに失敗しました。設定をご確認ください。");
+            console.error("Error accessing microphone:", error);  // エラー内容をコンソールに出力
         }
     });
 
@@ -51,6 +57,8 @@ document.addEventListener('DOMContentLoaded', function() {
             mediaRecorder.stop();
             recordBtn.disabled = false;
             stopBtn.disabled = true;
+            console.log("Recording stopped.");  // デバッグ用: 録音停止を確認
         }
     });
 });
+
