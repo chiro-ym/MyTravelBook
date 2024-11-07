@@ -30,21 +30,28 @@
 <div id="memo-form">
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}
-
-        <!-- 音声入力ボタン -->
-        <button type="button" id="btn">音声入力</button>
-        <div id="content"></div>
-
-        <!-- `memo_text`フィールドを`textarea`に変更 -->
+        
+        <!-- メモのテキスト入力 -->
         <textarea id="memo_text" name="memo_text" placeholder="ここにメモを入力してください"></textarea>
+
+        <!-- 画像のアップロード -->
+        <div class="file-input">
+            <label for="memo_photo_path">写真を追加</label>
+            {{ form.memo_photo_path }}
+        </div>
 
         <!-- 音声録音のボタン -->
         <button type="button" id="record-btn">録音開始</button>
         <button type="button" id="stop-btn" disabled>録音停止</button>
         <audio id="audio-playback" controls></audio>    
 
+        <!-- 音声データの保存用 -->
         <input type="hidden" name="audio_data" id="audio-data">
+        
+        <!-- 文字起こしボタン -->
+        <button type="button" id="btn"><span aria-hidden="true">🎙</span> 音声入力</button>
+
+        <!-- 送信ボタン -->
         <button type="submit" id="submit-btn" disabled>送信</button>
     </form>
 </div>
@@ -52,5 +59,10 @@
 <!-- 外部JavaScriptファイルの読み込み -->
 <script src="{% static 'js/speechRecognition.js' %}"></script>
 <script src="{% static 'js/audioRecorder.js' %}"></script>
+<script src="{% static 'js/memoUI.js' %}"></script>
 {% endblock %}
 
+<!-- CSSファイルの読み込み -->
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/memo.css' %}">
+{% endblock %}

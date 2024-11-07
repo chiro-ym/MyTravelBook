@@ -11,8 +11,9 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.urls import reverse_lazy
 from .models import TravelRecord, Prefecture, Category, Photo, TravelMemo
-import random
+import random, base64
 from django.http import JsonResponse
+from django.core.files.base import ContentFile
 
 class TopView(View):
     def get(self, request):
@@ -399,6 +400,15 @@ class TravelMemoListView(View):
         if form.is_valid():
             travel_memo = form.save(commit=False)
             travel_memo.travel_record = travel_record
+            
+            # Base64の音声データをデコードしてaudio_pathに保存
+            audio_data = form.cleaned_data.get('audio_data')
+            if audio_data:
+                print("音声データが送信されました: ", audio_data)  # デバッグ用
+                format, audio_str = audio_data.split(';base64,')  # "data:audio/mp3;base64," を除去
+                audio_file = ContentFile(base64.b64decode(audio_str), name='recording.mp3')
+                travel_memo.audio_path.save('recording.mp3', audio_file, save=False)
+            
             travel_memo.save()
             return redirect('travelmemo_list', travel_record_id=travel_record.id)
         

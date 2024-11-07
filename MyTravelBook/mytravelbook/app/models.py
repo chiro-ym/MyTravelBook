@@ -97,7 +97,7 @@ class TravelMemo(models.Model):
     travel_record = models.ForeignKey(TravelRecord, on_delete=models.CASCADE)
     memo_text = models.TextField(blank=True, null=True)
     memo_photo_path = models.ImageField(upload_to='memo_photos/', blank=True, null=True)
-    audio_path = models.CharField(max_length=255, blank=True, null=True)
+    audio_path = models.FileField(upload_to='audio/', blank=True, null=True)  # 修正
     audio_transcript = models.TextField(blank=True, null=True)
     memo_location = models.CharField(max_length=255, blank=True, null=True)
     latitude = models.FloatField(null=True, blank=True)  # 緯度

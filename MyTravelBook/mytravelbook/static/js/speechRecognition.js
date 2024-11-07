@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', function() {
     speech.continuous = false;
 
     const btn = document.getElementById('btn');
-    const content = document.getElementById('content');
     const memoTextInput = document.getElementById('memo_text');
 
     btn.addEventListener('click', function() {
@@ -19,8 +18,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     speech.addEventListener('result', function(e) {
         const transcript = e.results[0][0].transcript;
-        content.textContent = transcript;
         memoTextInput.value = transcript;
+        // 手動でinputイベントを発火して送信ボタンを有効化
+        memoTextInput.dispatchEvent(new Event('input'));
     });
 
     speech.addEventListener('error', function(e) {
