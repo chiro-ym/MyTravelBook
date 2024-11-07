@@ -87,36 +87,4 @@
     background-color: #c82333; /* ホバー時の色 */
 }
 
-.recent-travels {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    margin: 20px 0;
-}
-
-.travel-item {
-    margin: 5px;
-    flex: 0 1 auto;
-    text-align: center;
-}
-
-.travel-item img {
-    width: 150px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 8px;
-}
-
-#memo-list .memo {
-    border: 1px solid #ddd;
-    padding: 10px;
-    margin-bottom: 10px;
-    background-color: #f9f9f9;
-}
-#memo-form {
-    margin-top: 20px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    background-color: #f2f2f2;
-}
 

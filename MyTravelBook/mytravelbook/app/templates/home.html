@@ -1,21 +1,25 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block head %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}"> 
 {% endblock %}
 
 {% block content %}
-    <h2>ホームページ</h2>
-    <a href="{% url 'create_travel_record' %}">旅行を記録</a>
-    {% if latest_travel_record_id %}
-        <a href="{% url 'travelmemo_list' latest_travel_record_id %}">たびメモ</a>
-    {% else %}
-    <p>たびメモはまだありません</p>
-    {% endif %}
-    
-    <p id="nextPrefecture">次の旅行先は…</p>
-    <button id="rouletteButton">ルーレットを回す</button>
+    <div class="home-buttons">
+        <a href="{% url 'create_travel_record' %}">📝旅行を記録</a>
+        {% if latest_travel_record_id %}
+            <a href="{% url 'travelmemo_list' latest_travel_record_id %}">📒たびメモ</a>
+        {% else %}
+            <p>たびメモはまだありません</p>
+        {% endif %}
+    </div>
+
+    <div class="roulette-section">
+        <p id="nextPrefecture">次の旅行先は…</p>
+        <button id="rouletteButton">ルーレットを回す</button>
+    </div>
+
 
     <script>
     document.getElementById("rouletteButton").addEventListener("click", function() {
@@ -31,9 +35,8 @@
     });
     </script>
 
-
     <!-- 最近の旅行セクション -->
-    <h2>最近の旅行</h2>
+    <h2>🛫最近の旅行</h2>
     <div class="recent-travels">
         {% for travel in recent_travels %}
             <div class="travel-item">

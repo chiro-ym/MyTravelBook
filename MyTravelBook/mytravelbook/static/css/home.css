@@ -1,0 +1,59 @@
+/* ホーム画面ボタンのスタイル */
+.home-buttons {
+    display: flex;
+    justify-content: center; /* 中央に配置 */
+    gap: 20px;
+    margin-top: 30px; /* ヘッダーから少し下げる */
+}
+
+.home-buttons a {
+    font-size: 1.5em; /* 文字サイズを大きく */
+    padding: 10px 20px;
+    background-color: #ffffff00;
+    color: #333;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.home-buttons a:hover {
+    background-color:#e7f1ff;
+}
+
+/* ルーレットセクションのスタイル */
+.roulette-section {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.roulette-section #nextPrefecture {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 3px;
+}
+
+.roulette-section button {
+    padding: 5px 10px;
+    font-size: 1em;
+}
+
+/* 最近の旅行セクション */
+.recent-travels {
+    display: flex;
+    gap: 15px; /* 写真の間にスペースを追加 */
+}
+
+.travel-item {
+    flex: 1 1 200px; /* 各アイテムの幅を指定して並べる */
+    text-align: left;
+}
+
+/* サムネイル画像のスタイル */
+.travel-item img {
+    width: 100%; /* カラム幅に合わせて画像の幅を調整 */
+    height: 100%; /* 縦幅も自動調整 */
+    object-fit: cover; /* 枠に収まるように中央部分を切り抜き */
+    aspect-ratio: 1 / 1; /* 正方形の比率を保持 */
+    border-radius: 0; /* 角丸をなくす */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* 軽い影を追加 */
+}
