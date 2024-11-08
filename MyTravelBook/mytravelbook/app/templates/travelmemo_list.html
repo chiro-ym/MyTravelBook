@@ -9,6 +9,13 @@
 
 {% include "base_tabs.html" with active_tab="travelmemo" %} <!-- タブ -->
 
+<div id="delete-all-memos">
+    <form action="{% url 'delete_all_memos' travel_record.id %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" onclick="return confirm('この操作はもとに戻せません。すべてのメモを削除しますか？')">すべてのメモを削除</button>
+    </form>
+</div>
+
 <div id="memo-list">
     {% for memo in memos %}
         <div class="memo">

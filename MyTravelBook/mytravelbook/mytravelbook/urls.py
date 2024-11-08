@@ -33,6 +33,7 @@ urlpatterns = [
     path('travel/<int:travel_id>/category/<int:category_id>/edit_comment/', views.edit_comment, name='edit_comment'),
     path('travel_record/<int:travel_record_id>/memo/', TravelMemoListView.as_view(), name='travelmemo_list'),
     path('memo/delete/<int:memo_id>/', views.delete_memo, name='delete_memo'),
+    path('travel_record/<int:travel_record_id>/delete_all_memos/', views.delete_all_memos, name= 'delete_all_memos'),
     path('search/', views.search_travel_records, name='travel_search'), 
     path('edit_category/<int:category_id>/', views.edit_category, name='edit_category'),
     path('roulette/', views.roulette_view, name='roulette'),

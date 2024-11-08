@@ -118,7 +118,6 @@ class HomeView(View):
             'latest_travel_record_id': latest_travel_record_id, 
         })
         
-    
 @login_required
 def create_travel_record(request):
     if request.method == 'POST':
@@ -141,6 +140,27 @@ def create_travel_record(request):
         'messages': messages.get_messages(request),
         'prefectures': prefectures
         })
+    
+def get_random_unvisited_prefecture(user):
+    # 訪問済みの都道府県を取得
+    visited_prefectures = TravelRecord.objects.filter(user=user).exclude(prefecture__isnull=True).values_list('prefecture__id', flat=True)
+    print(f"Visited prefectures for user {user}: {visited_prefectures}")  # デバッグ用
+    # 未訪問の都道府県を取得
+    unvisited_prefectures = Prefecture.objects.exclude(id__in=visited_prefectures)
+    print(f"Unvisited prefectures: {[pref.name for pref in unvisited_prefectures]}")  # デバッグ用
+    
+    if unvisited_prefectures.exists():
+        return random.choice(unvisited_prefectures)
+    return None
+
+@login_required
+def roulette_view(request):
+    prefecture = get_random_unvisited_prefecture(request.user)
+    if prefecture:
+        print("Selected prefecture:", prefecture)  # デバッグ用
+        return JsonResponse({'prefecture': prefecture.name})
+    else:
+        return JsonResponse({'error': '未訪問の都道府県がありません'})
     
 @method_decorator([login_required, never_cache], name='dispatch')
 class TravelDetailView(View):
@@ -453,6 +473,14 @@ def delete_memo(request, memo_id):
     memo.delete()
     return redirect('travelmemo_list', travel_record_id=travel_record_id)
 
+@login_required  
+def delete_all_memos(request, travel_record_id):
+    travel_record = get_object_or_404(TravelRecord, id=travel_record_id)
+    
+    if request.method == 'POST':
+        TravelMemo.objects.filter(travel_record=travel_record).delete()
+        return redirect('travelmemo_list', travel_record_id=travel_record.id)
+
 @login_required 
 def search_travel_records(request):
     form = TravelSearchForm(request.GET or None)
@@ -475,23 +503,3 @@ def search_travel_records(request):
         'form': form,
         'results': results
         })
-    
-def get_random_unvisited_prefecture(user):
-    # 訪問済みの都道府県を取得
-    visited_prefectures = TravelRecord.objects.filter(user=user).values_list('prefecture', flat=True)
-    print("Visited prefectures:", visited_prefectures)  # デバッグ用
-    # 未訪問の都道府県を取得
-    unvisited_prefectures = Prefecture.objects.exclude(id__in=visited_prefectures)
-    
-    if unvisited_prefectures.exists():
-        return random.choice(unvisited_prefectures)
-    return None
-
-@login_required
-def roulette_view(request):
-    prefecture = get_random_unvisited_prefecture(request.user)
-    if prefecture:
-        print("Selected prefecture:", prefecture)  # デバッグ用
-        return JsonResponse({'prefecture': prefecture.name})
-    else:
-        return JsonResponse({'error': '未訪問の都道府県がありません'})
