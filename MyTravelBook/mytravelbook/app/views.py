@@ -14,6 +14,8 @@ from .models import TravelRecord, Prefecture, Category, Photo, TravelMemo
 import random, base64
 from django.http import JsonResponse
 from django.core.files.base import ContentFile
+from geopy.geocoders import Nominatim
+from geopy.exc import GeocoderServiceError
 
 class TopView(View):
     def get(self, request):
@@ -409,15 +411,25 @@ class TravelMemoListView(View):
             travel_memo.latitude = form.cleaned_data.get('latitude')
             travel_memo.longitude = form.cleaned_data.get('longitude')
             
+            # Geopyを使って緯度・経度から住所を取得
+            geolocator = Nominatim(user_agent="my_travelbook_app")
+            try:
+                location = geolocator.reverse(f"{travel_memo.latitude}, {travel_memo.longitude}")
+                if location and location.raw.get('address'):
+                    address = location.raw['address']
+                    province = address.get('province', '')
+                    city = address.get('city', address.get('town', address.get('village', '')))
+                    travel_memo.memo_location = f"{province} {city}"
+            except GeocoderServiceError as e:
+                travel_memo.memo_location = "住所情報が取得できませんでした"
+                
             # Base64の音声データをデコードしてaudio_pathに保存
             audio_data = form.cleaned_data.get('audio_data')
             if audio_data:
-                print("音声データが送信されました: ", audio_data)  # デバッグ用
                 try:
                     format, audio_str = audio_data.split(';base64,')
                     audio_file = ContentFile(base64.b64decode(audio_str), name='recording.mp3')
                     travel_memo.audio_path.save('recording.mp3', audio_file, save=False)
-                    print("音声データの保存に成功しました")  # デバッグ用
                 except Exception as e:
                     print("音声データの保存に失敗しました: ", e)  # デバッグ用
             else:
