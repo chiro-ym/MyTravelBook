@@ -168,6 +168,7 @@ class CommentForm(forms.ModelForm):
         fields = ['category_comment']
         
 class TravelMemoForm(forms.ModelForm):
+    memo_text = forms.CharField(widget=forms.Textarea(), required=False)
     audio_data = forms.CharField(widget=forms.HiddenInput(), required=False)  # 音声データのためのhiddenフィールド
     
     class Meta:

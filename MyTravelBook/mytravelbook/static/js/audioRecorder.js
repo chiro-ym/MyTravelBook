@@ -34,11 +34,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // 音声データをBase64に変換してフォームに追加
                 const reader = new FileReader();
-                reader.onloadend = () => {
-                    audioDataInput.value = reader.result; // Base64データをセット
-                    submitBtn.disabled = false; // 録音完了後に送信ボタンを有効にする
-                    console.log("Base64 audio data set:", reader.result);  // デバッグ用: Base64データを確認
-                };
+                // audioRecorder.js の録音停止後に追加
+            reader.onloadend = () => {
+            audioDataInput.value = reader.result; // Base64データをセット
+            updateSubmitButtonState();  // ボタンの有効化を更新
+            console.log("Base64 audio data set:", reader.result);  // デバッグ用: Base64データを確認
+            };
+
                 reader.readAsDataURL(audioBlob); // Base64エンコード
             });
 

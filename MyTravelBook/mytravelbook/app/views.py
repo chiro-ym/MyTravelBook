@@ -410,10 +410,17 @@ class TravelMemoListView(View):
             audio_data = form.cleaned_data.get('audio_data')
             if audio_data:
                 print("音声データが送信されました: ", audio_data)  # デバッグ用
-                format, audio_str = audio_data.split(';base64,')  # "data:audio/mp3;base64," を除去
-                audio_file = ContentFile(base64.b64decode(audio_str), name='recording.mp3')
-                travel_memo.audio_path.save('recording.mp3', audio_file, save=False)
-            
+                try:
+                    format, audio_str = audio_data.split(';base64,')
+                    audio_file = ContentFile(base64.b64decode(audio_str), name='recording.mp3')
+                    travel_memo.audio_path.save('recording.mp3', audio_file, save=False)
+                    print("音声データの保存に成功しました")  # デバッグ用
+                except Exception as e:
+                    print("音声データの保存に失敗しました: ", e)  # デバッグ用
+            else:
+                print("音声データが空です")  # デバッグ用
+                
+                print("Audio path:", travel_memo.audio_path)  # デバッグ用
             travel_memo.save()
             return redirect('travelmemo_list', travel_record_id=travel_record.id)
         
