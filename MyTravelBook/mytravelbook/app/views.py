@@ -405,6 +405,9 @@ class TravelMemoListView(View):
         if form.is_valid():
             travel_memo = form.save(commit=False)
             travel_memo.travel_record = travel_record
+            travel_memo.memo_location = form.cleaned_data.get('memo_location')
+            travel_memo.latitude = form.cleaned_data.get('latitude')
+            travel_memo.longitude = form.cleaned_data.get('longitude')
             
             # Base64の音声データをデコードしてaudio_pathに保存
             audio_data = form.cleaned_data.get('audio_data')

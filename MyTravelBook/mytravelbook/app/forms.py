@@ -170,10 +170,13 @@ class CommentForm(forms.ModelForm):
 class TravelMemoForm(forms.ModelForm):
     memo_text = forms.CharField(widget=forms.Textarea(), required=False)
     audio_data = forms.CharField(widget=forms.HiddenInput(), required=False)  # 音声データのためのhiddenフィールド
-    
+    memo_location = forms.CharField(widget=forms.HiddenInput(), required=False)
+    latitude = forms.FloatField(widget=forms.HiddenInput(), required=False)
+    longitude = forms.FloatField(widget=forms.HiddenInput(), required=False)
+
     class Meta:
         model = TravelMemo
-        fields = ['memo_text', 'memo_photo_path', 'audio_path', 'memo_location']
+        fields = ['memo_text', 'memo_photo_path', 'audio_path', 'memo_location', 'latitude', 'longitude']
         widgets = {
             'memo_text': forms.Textarea(attrs={'placeholder': 'ここにメモを入力してください'}),
             'memo_photo_path': forms.ClearableFileInput(attrs={'class':'form-control'}),

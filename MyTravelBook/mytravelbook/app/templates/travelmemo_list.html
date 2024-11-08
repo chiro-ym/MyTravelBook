@@ -15,6 +15,11 @@
             <p>{{ memo.memo_text }}</p>
             <p>投稿日時: {{ memo.created_at }}</p>
 
+            <!-- 位置情報の表示 -->
+            {% if memo.memo_location %}
+                <p>{{ memo.memo_location }}</p>
+            {% endif %}
+
             {% if memo.memo_photo_path %}
                 <img src="{{ memo.memo_photo_path.url }}" alt="メモの画像" style="max-width: 300px;">
             {% endif %}
@@ -58,6 +63,11 @@
         <!-- 文字起こしボタン -->
         <button type="button" id="btn"><span aria-hidden="true">🎙</span> 音声入力</button>
 
+        <!-- 位置情報のための隠しフィールド -->
+        <input type="hidden" id="memo_location" name="memo_location">
+        <input type="hidden" id="latitude" name="latitude">
+        <input type="hidden" id="longitude" name="longitude">
+
         <!-- 送信ボタン -->
         <button type="submit" id="submit-btn" disabled>送信</button>
     </form>
@@ -66,6 +76,7 @@
 <!-- 外部JavaScriptファイルの読み込み -->
 <script src="{% static 'js/speechRecognition.js' %}"></script>
 <script src="{% static 'js/audioRecorder.js' %}"></script>
+<script src="{% static 'js/location.js' %}"></script>
 <script src="{% static 'js/memoUI.js' %}"></script>
 {% endblock %}
 
