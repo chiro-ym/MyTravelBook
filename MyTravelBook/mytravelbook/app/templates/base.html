@@ -1,35 +1,14 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+    {% load static %}
+    
     <meta charset="UTF-8">
-    <title>{% block title %}MyTravelBook{% endblock %}</title>
-    <style>
-        header {
-            display: flex;
-            align-items: center;
-            border-bottom: 1px solid grey;
-            padding: 20px;
-        }
-        body {
-            padding: 40px; /* ページ全体に余白を設定 */
-        }
-        nav ul {
-            display: flex; /* リストを横並びにする */
-            list-style-type: none; /* デフォルトのリストスタイルを無効に */
-            padding: 0; /* リストの内側のパディングをゼロに */
-            margin: 0; /* リストの外側のマージンをゼロに */
-        }
-        nav li {
-            margin-right: 20px; /* 各リンクの間にスペースを追加 */
-        }
-        nav form {
-            display: flex; /* フォーム内の要素を横並びに */
-        }
-        nav input {
-            margin-right: 5px; /* フォームの入力フィールドとボタンの間にスペース */
-        }
-       
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyTravelBook</title>       
+
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    
     {% block extra_head %}
     <!-- ページごとの追加CSSやメタデータ -->
     {% endblock %}
@@ -57,8 +36,5 @@
     <!-- 各ページごとのコンテンツ -->
     {% endblock %}
 
-    <footer>
-        <!-- 必要であればフッター -->
-    </footer>
 </body>
 </html>

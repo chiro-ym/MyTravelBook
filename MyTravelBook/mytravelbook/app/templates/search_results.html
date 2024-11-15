@@ -1,14 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>検索結果</h2>
-
 <form method="get" action="{% url 'travel_search' %}">
     {{ form.as_p }}
     <button type="submit">検索</button>
 </form>
 
-<h3>検索結果一覧</h3>
+<h1>検索結果一覧</h1>
 <ul>
     {% for travel in results %}
         <li>

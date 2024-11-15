@@ -1,31 +1,35 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
     <title>MyTravelBook</title>
 </head>
 <body>
-    <h1>ログインページ</h1>
-    <form method="post">
-        {% csrf_token %}
-        <div>メールアドレス <input type="email" name="username"></div>
-        <div>パスワード <input type="password" name="password"></div>
-        <button type="submit">ログイン</button>
-    </form>
+    <div class="login-container">
+       <h1>MyTravelBook</h1>
+       <form method="post">
+            {% csrf_token %}
+            <div>メールアドレス <input type="email" name="username"></div>
+            <div>パスワード <input type="password" name="password"></div>
+            <button type="submit">ログイン</button>
+        </form>
 
-    {% if form.errors %}
-        <div style="color: red;">
-            <ul>
-                {% for field, errors in form.errors.items %}
-                    {% for error in errors %}
-                        <li>{{ error }}</li>
+        {% if form.errors %}
+            <div style="color: red;">
+                <ul>
+                    {% for field, errors in form.errors.items %}
+                        {% for error in errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
                     {% endfor %}
-                {% endfor %}
-            </ul>
-        </div>
-    {% endif %}
+                </ul>
+            </div>
+        {% endif %}
 
-    <a href="{% url 'top' %}">トップに戻る</a>
+        <a href="{% url 'top' %}">トップに戻る</a>
+    </div>
 </body>
 </html>

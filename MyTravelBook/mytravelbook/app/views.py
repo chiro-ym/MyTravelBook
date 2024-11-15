@@ -130,7 +130,6 @@ def create_travel_record(request):
             return redirect('travel_detail',travel_record.id)
         else:
             messages.error(request, 'フォームにエラーがあります。再度お試しください。')
-            print(form.errors)  #デバック用
     else:
         form = TravelRecordForm()
         
@@ -144,10 +143,8 @@ def create_travel_record(request):
 def get_random_unvisited_prefecture(user):
     # 訪問済みの都道府県を取得
     visited_prefectures = TravelRecord.objects.filter(user=user).exclude(prefecture__isnull=True).values_list('prefecture__id', flat=True)
-    print(f"Visited prefectures for user {user}: {visited_prefectures}")  # デバッグ用
     # 未訪問の都道府県を取得
     unvisited_prefectures = Prefecture.objects.exclude(id__in=visited_prefectures)
-    print(f"Unvisited prefectures: {[pref.name for pref in unvisited_prefectures]}")  # デバッグ用
     
     if unvisited_prefectures.exists():
         return random.choice(unvisited_prefectures)
@@ -431,18 +428,27 @@ class TravelMemoListView(View):
             travel_memo.latitude = form.cleaned_data.get('latitude')
             travel_memo.longitude = form.cleaned_data.get('longitude')
             
+            if travel_memo.latitude is None or travel_memo.longitude is None:
+                print("位置情報が提供されていません")
+                travel_memo.memo_location = "位置情報未設定"
+            else:       
             # Geopyを使って緯度・経度から住所を取得
-            geolocator = Nominatim(user_agent="my_travelbook_app")
-            try:
-                location = geolocator.reverse(f"{travel_memo.latitude}, {travel_memo.longitude}")
-                if location and location.raw.get('address'):
-                    address = location.raw['address']
-                    province = address.get('province', '')
-                    city = address.get('city', address.get('town', address.get('village', '')))
-                    travel_memo.memo_location = f"{province} {city}"
-            except GeocoderServiceError as e:
-                travel_memo.memo_location = "住所情報が取得できませんでした"
-                
+                geolocator = Nominatim(user_agent="my_travelbook_app")
+                try:
+                    location = geolocator.reverse(f"{travel_memo.latitude}, {travel_memo.longitude}")
+                    if location and location.raw.get('address'):
+                        address = location.raw['address']
+                        province = address.get('province', '')
+                        city = address.get('city', address.get('town', address.get('village', '')))
+                        travel_memo.memo_location = f"{province} {city}"
+                except GeocoderServiceError as e:
+                    travel_memo.memo_location = "住所情報が取得できませんでした"
+                else:
+                # 緯度・経度が無効な場合の処理
+                    travel_memo.memo_location = "位置情報未設定"  # エラー時のデフォルト値
+                    travel_memo.latitude = None
+                    travel_memo.longitude = None
+            
             # Base64の音声データをデコードしてaudio_pathに保存
             audio_data = form.cleaned_data.get('audio_data')
             if audio_data:

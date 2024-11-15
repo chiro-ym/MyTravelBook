@@ -7,9 +7,9 @@
 
 {% block content %}
     <div class="home-buttons">
-        <a href="{% url 'create_travel_record' %}">📝旅行を記録</a>
+        <a href="{% url 'create_travel_record' %}">旅行を記録</a>
         {% if latest_travel_record_id %}
-            <a href="{% url 'travelmemo_list' latest_travel_record_id %}">📒たびメモ</a>
+            <a href="{% url 'travelmemo_list' latest_travel_record_id %}">たびメモ</a>
         {% else %}
             <p>たびメモはまだありません</p>
         {% endif %}
@@ -36,7 +36,7 @@
     </script>
 
     <!-- 最近の旅行セクション -->
-    <h2>🛫最近の旅行</h2>
+    <h1>🛫最近の旅行</h1>
     <div class="recent-travels">
         {% for travel in recent_travels %}
             <div class="travel-item">
@@ -48,7 +48,7 @@
                         <img src="{% static 'photos/default.jpg' %}" alt="Default Image">
                     {% endif %}
                     <!-- タイトルを表示 -->
-                    <h3>{{ travel.title }}</h3>
+                    <h2>{{ travel.title }}</h2>
                 </a>
             </div>
         {% endfor %}

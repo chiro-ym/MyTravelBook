@@ -5,27 +5,35 @@
 {% block content %}
 {% load static %}
 
-{% include 'base_breadcrumb.html' %}  <!-- パンくずリストを追加 -->
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/travel_detail.css' %}">
+{% endblock %}
 
-{% include "base_tabs.html" with active_tab="travel_detail" %}<!-- タブを表示 -->
 
-    {% load static %}
-    <h3>タイトル：{{ travel_record.title }}</h3>
-    <p>旅行先: {{ travel_record.prefecture }} {{ travel_record.city }}</p>
-    <p>出発日: {{ travel_record.start_date }}</p>
-    <p>帰宅日: {{ travel_record.end_date }}</p>
-    
-    {% if travel_record.main_photo_url %}
-        <img src="{{ travel_record.main_photo_url.url }}" alt="メイン画像" width="300">
-    {% else %}
-        <img src="{% static 'photos/default.jpg' %}" alt="デフォルト画像" width="300">
-    {% endif %}
-    
-    <h4>コメント</h4>
-    <p>{{ travel_record.comment }}</p>
-    <br>
+{% include 'base_breadcrumb.html' %}  <!-- パンくずリスト -->
 
-    <details>
+{% include "base_tabs.html" with active_tab="travel_detail" %}<!-- タブ -->
+<div class="travel-detail-container">
+    <!-- 画像とテキスト情報を含むコンテナ -->
+    <div class="travel-info">
+        <div class="main-photo">
+            {% if travel_record.main_photo_url %}
+                <img src="{{ travel_record.main_photo_url.url }}" alt="メイン画像">
+            {% else %}
+                <img src="{% static 'photos/default.jpg' %}" alt="デフォルト画像">
+            {% endif %}
+        </div>
+        <div class="travel-details">
+            <h1>タイトル：{{ travel_record.title }}</h1>
+            <p>旅行先: {{ travel_record.prefecture }} {{ travel_record.city }}</p>
+            <p>出発日: {{ travel_record.start_date }} - 帰宅日: {{ travel_record.end_date }}</p>
+        </div>
+    </div>
+
+    <h2>コメント</h2>
+        <p>{{ travel_record.comment }}</p>
+
+    <details class="travel-extra-details">
         <summary>旅行詳細</summary>
 
         <div>
@@ -49,7 +57,7 @@
         </div>
     </details>
 
-<div>
+    <div class="edit-buttons">
     <form method="GET" action="{% url 'travel_record_edit' travel_record.id %}">
         <button type="submit" class="btn btn-primary">編集</button>
     </form>
@@ -58,6 +66,7 @@
         {% csrf_token %}
         <button type="submit" class="btn btn-danger" onclick="return confirm('本当に削除しますか？');">削除</button>
     </form>
+    </div>
 </div>
 {% endblock %}
 

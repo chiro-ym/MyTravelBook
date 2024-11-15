@@ -59,7 +59,7 @@
             {{ form.memo_photo_path }}
         </div>
 
-        <!-- 音声録音のボタン -->
+        <!-- 音声録音 -->
         <button type="button" id="record-btn">録音開始</button>
         <button type="button" id="stop-btn" disabled>録音停止</button>
         <audio id="audio-playback" controls></audio>    
@@ -67,10 +67,10 @@
         <!-- 音声データの保存用 -->
         <input type="hidden" name="audio_data" id="audio-data">
         
-        <!-- 文字起こしボタン -->
+        <!-- 文字起こし -->
         <button type="button" id="btn"><span aria-hidden="true">🎙</span> 音声入力</button>
 
-        <!-- 位置情報のための隠しフィールド -->
+        <!-- 位置情報 -->
         <input type="hidden" id="memo_location" name="memo_location">
         <input type="hidden" id="latitude" name="latitude">
         <input type="hidden" id="longitude" name="longitude">
@@ -88,6 +88,6 @@
 {% endblock %}
 
 <!-- CSSファイルの読み込み -->
-{% block head %}
+{% block extra_head %}
 <link rel="stylesheet" href="{% static 'css/memo.css' %}">
 {% endblock %}
