@@ -1,19 +1,27 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}MyTravelBook{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/mypage.css' %}">
+{% endblock %}
 
 {% block content %}
 
     <main>
         <h1>マイページ</h1>
-        <p>名前: {{ user.name }}</p>
-        <p>メール: {{ user.email }}</p>
-        <p>パスワード: ********</p>
 
-        <div>
-            <a href="{% url 'user_edit' %}">プロフィール編集</a>
-            <a href="{% url 'password_change' %}">パスワード変更</a>
-            <a href="{% url 'logout' %}">ログアウト</a>
+        <div class="profile-info">
+            <p>名前: {{ user.name }}</p>
+            <p>メール: {{ user.email }}</p>
+            <p>パスワード: ********</p>
+        </div>
+
+        <div class="action-buttons">
+            <a href="{% url 'user_edit' %}" class="action-button">プロフィール編集</a>
+            <a href="{% url 'password_change' %}" class="action-button">パスワード変更</a>
+            <a href="{% url 'logout' %}" class="action-button">ログアウト</a>
         </div>
     </main>
 {% endblock %}

@@ -4,17 +4,20 @@
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link rel="stylesheet" href="{% static 'css/user-forms.css' %}">
     <title>MyTravelBook</title>
 </head>
 <body>
-    <div class="login-container">
+    <div class="account-container">
        <h1>MyTravelBook</h1>
        <form method="post">
             {% csrf_token %}
             <div>メールアドレス <input type="email" name="username"></div>
             <div>パスワード <input type="password" name="password"></div>
-            <button type="submit">ログイン</button>
+            <div class="button-container">
+                <button type="submit">ログイン</button>
+                <a href="{% url 'top' %}" class="center-link">トップに戻る</a>
+            <div>
         </form>
 
         {% if form.errors %}
@@ -28,8 +31,6 @@
                 </ul>
             </div>
         {% endif %}
-
-        <a href="{% url 'top' %}">トップに戻る</a>
     </div>
 </body>
 </html>

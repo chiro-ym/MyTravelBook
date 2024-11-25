@@ -1,20 +1,24 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/user-forms.css' %}">
     <title>MyTravelBook</title>
 </head>
 <body>
-    <h1>新規登録</h1>
-    <form method="post">
-        {% csrf_token %}
-        <div>名前 <input type="text" name="name"></div>
-        <div>メールアドレス <input type="email" name="email"></div>
-        <div>パスワード <input type="password" name="password1"></div>
-        <div>確認用パスワード <input type="password" name="password2"></div>
-        <button type="submit">登録</button>
-    </form>
+    <div class="account-container">
+        <h1>新規登録</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div>ユーザー名 <input type="text" name="name" id="name" required></div>
+            <div>メールアドレス <input type="email" name="email" id="email" required></div>
+            <div>パスワード <input type="password" name="password1" id="password" required></div>
+            <div>確認用パスワード <input type="password" name="password2" id="password2" required></div>
+            <p class="form-note">パスワードは半角英字、数字を組み合わせた8文字以上で入力してください</p>
+            <button type="submit" class="form-button">登録</button>
+        </form>
 
     {% if form.errors %}
         <div style="color: red;">
@@ -28,6 +32,6 @@
         </div>
     {% endif %}
 
-    <a href="{% url 'top' %}">トップに戻る</a>
+    <a href="{% url 'top' %}" class="center-link">トップに戻る</a>
 </body>
 </html>
