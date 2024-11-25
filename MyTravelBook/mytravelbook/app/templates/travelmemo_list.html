@@ -19,29 +19,36 @@
 <div id="memo-list">
     {% for memo in memos %}
         <div class="memo">
-            <p>{{ memo.memo_text }}</p>
-            <p>投稿日時: {{ memo.created_at }}</p>
+             <!-- コンテンツ部分（テキスト、画像、音声） -->
+             <div class="memo-content">
+                {% if memo.memo_text %}
+                    <p>{{ memo.memo_text }}</p>
+                {% endif %}
 
-            <!-- 位置情報の表示 -->
-            {% if memo.memo_location %}
-                <p>{{ memo.memo_location }}</p>
-            {% endif %}
+                {% if memo.memo_photo_path %}
+                    <img src="{{ memo.memo_photo_path.url }}" alt="メモの画像" style="max-width: 300px;">
+                {% endif %}
 
-            {% if memo.memo_photo_path %}
-                <img src="{{ memo.memo_photo_path.url }}" alt="メモの画像" style="max-width: 300px;">
-            {% endif %}
+                {% if memo.audio_path %}
+                    <audio controls>
+                        <source src="{{ memo.audio_path.url }}" type="audio/mp3">
+                        お使いのブラウザはオーディオタグをサポートしていません。
+                    </audio>
+                {% endif %}
+            </div>
 
-            {% if memo.audio_path %}
-                <audio controls>
-                    <source src="{{ memo.audio_path.url }}" type="audio/mp3">
-                    お使いのブラウザはオーディオタグをサポートしていません。
-                </audio>
-            {% endif %}
-
-            <form action="{% url 'delete_memo' memo.id %}" method="post" style="display:inline;">
-                {% csrf_token %}
-                <button type="submit" onclick="return confirm('本当に削除しますか？')">削除</button>
-            </form>
+            <div class="memo-header">
+                <div class="memo-info">
+                    <span class="memo-date">投稿日時: {{ memo.created_at }}</span>
+                    {% if memo.memo_location %}
+                        <span class="memo-location">場所: {{ memo.memo_location }}</span>
+                    {% endif %}
+                </div>
+                <form action="{% url 'delete_memo' memo.id %}" method="post" style="display:inline;">                   
+                    {% csrf_token %}
+                    <button class="delete-btn" type="submit" onclick="return confirm('本当に削除しますか？')">削除</button>
+                </form>
+            </div>  
         </div>
     {% endfor %}
 </div>
@@ -49,34 +56,27 @@
 <div id="memo-form">
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        
-        <!-- メモのテキスト入力 -->
-        <textarea id="memo_text" name="memo_text" placeholder="ここにメモを入力してください"></textarea>
-
-        <!-- 画像のアップロード -->
-        <div class="file-input">
-            <label for="memo_photo_path">写真を追加</label>
+        <div class="input-container">
+            <label for="memo_photo_path" class="input-icon">📷 写真</label>
             {{ form.memo_photo_path }}
-        </div>
-
-        <!-- 音声録音 -->
-        <button type="button" id="record-btn">録音開始</button>
-        <button type="button" id="stop-btn" disabled>録音停止</button>
-        <audio id="audio-playback" controls></audio>    
-
-        <!-- 音声データの保存用 -->
-        <input type="hidden" name="audio_data" id="audio-data">
         
-        <!-- 文字起こし -->
-        <button type="button" id="btn"><span aria-hidden="true">🎙</span> 音声入力</button>
-
-        <!-- 位置情報 -->
-        <input type="hidden" id="memo_location" name="memo_location">
-        <input type="hidden" id="latitude" name="latitude">
-        <input type="hidden" id="longitude" name="longitude">
-
-        <!-- 送信ボタン -->
-        <button type="submit" id="submit-btn" disabled>送信</button>
+            <!-- 音声録音 -->
+            <button type="button" id="record-btn">録音開始</button>
+            <button type="button" id="stop-btn" disabled>録音停止</button>
+            <audio id="audio-playback" controls></audio>    
+            <!-- 音声データの保存用 -->
+            <input type="hidden" name="audio_data" id="audio-data">
+            <!-- 位置情報 -->
+            <input type="hidden" id="memo_location" name="memo_location">
+            <input type="hidden" id="latitude" name="latitude">
+            <input type="hidden" id="longitude" name="longitude">
+            <!-- テキスト入力 -->
+            <input type="text" id="memo_text" name="memo_text" placeholder="メモを入力">
+            <!-- 文字起こし -->
+            <button type="button" id="btn"><span aria-hidden="true">🎙</span> 音声入力</button>
+            <!-- 送信ボタン -->
+            <button type="submit" id="submit-btn" disabled>送信</button>
+        </div>
     </form>
 </div>
 
