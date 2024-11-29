@@ -1,12 +1,18 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/travel-record-form.css' %}"> 
+    <script src="{% static 'js/photo-upload.js' %}"></script>
+{% endblock %}
 
 {% block title %}MyTravelBook{% endblock %}
 
 {% block content %}
 
+<div class="travel-record-form-container">
     <h2>旅行記録を作成</h2>
 
-    <!-- フォームのエラーメッセージを表示 -->
     {% if form.errors %}
     <ul class="errorlist">
         {% for field in form %}
@@ -22,34 +28,67 @@
     
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="title">{{ form.title.label }}</label>
+            {{ form.title }}
+        </div>
 
-        {{ form.title.label }}{{ form.title }}<br>
-        {{ form.start_date.label }}{{ form.start_date }}<br>
-        {{ form.end_date.label }}{{ form.end_date }}<br>
-        {{ form.comment.label }}{{ form.comment }}<br>
-        {{ form.prefecture.label }}{{ form.prefecture }}
-        <label for="city"> </label>
-        <input type="text" id="city" name="city" placeholder="自由に入力してください"><br>
-        {% if form.city.errors %}
-        <div style="color: red;">{{ form.city.errors }}</div>  <!-- エラー表示 -->
-        {% endif %}
+        <div class="form-group">
+            <label for="start_date">{{ form.start_date.label }}</label>
+            {{ form.start_date }}
+        </div>
 
-        <label for="main_photo_url">メイン画像</label>
-        <input type="file" id="main_photo_url" name="main_photo_url"><br>
+        <div class="form-group">
+            <label for="end_date">{{ form.end_date.label }}</label>
+            {{ form.end_date }}
+        </div>
 
+        <div class="form-group">
+            <label for="prefecture">{{ form.prefecture.label }}</label>
+            {{ form.prefecture }}
+            <input type="text" id="city" name="city" placeholder="自由に入力してください"><br>
+            {% if form.city.errors %}
+            <div class="error">{{ form.city.errors }}</div>  <!-- エラー表示 -->
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label for="photo">メイン写真</label>
+            <input type="file" id="photo" class="custom-file-input" onchange="updateFileName(this)">
+            <label for="photo" class="custom-file-label">写真を追加</label>
+            <div id="selected-file" class="selected-file"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="comment">{{ form.comment.label }}</label>
+            <textarea id="comment" name="comment" rows="3" placeholder="コメントを入力してください"></textarea>
+        </div>
 
         <details>
-            <summary>詳細情報を追加</summary>
-
-            {{ form.accommodation_info.label }}{{ form.accommodation_info }}<br>
-            {{ form.meal_info.label }}{{ form.meal_info }}<br>
-            {{ form.transport_info.label }}{{ form.transport_info }}<br>
-            {{ form.cost_info.label }}{{ form.cost_info }}<br>
-        
+            <summary>詳細を追加</summary>
+            <div class="form-group">
+                <label for="accommodation_info">{{ form.accommodation_info.label }}</label>
+                {{ form.accommodation_info }}
+            </div>
+            <div class="form-group">
+                <label for="meal_info">{{ form.meal_info.label }}</label>
+                {{ form.meal_info }}
+            </div>
+            <div class="form-group">
+                <label for="transport_info">{{ form.transport_info.label }}</label>
+                {{ form.transport_info }}
+            </div>
+            <div class="form-group">
+                <label for="cost_info">{{ form.cost_info.label }}</label>
+                {{ form.cost_info }}
+            </div>
         </details>
 
-        <button type="submit">保存</button>
-        <a href="{% url 'travel_list' %}">キャンセル</a>
+        <div class="form-buttons">
+            <button type="submit" class="btn save-btn">保存</button>
+            <button type="button" class="btn cancel-btn" onclick="history.back();">キャンセル</button>
+        </div>      
      </form>
-
+</div>
 {% endblock %}

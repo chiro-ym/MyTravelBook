@@ -1,28 +1,38 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/travel-list.css' %}"> 
+{% endblock %}
 
 {% block title %}MyTravelBook{% endblock %}
+
 {% block content %}
+    <div class="travel-list-container">
+        <header class="travel-list-header">
+            <h2>旅行記録一覧</h2>
+            <a href="{% url 'create_travel_record' %}">新しい旅行を記録する</a>
+        </header>
 
-    {% load static %}
-    <h1>旅行記録一覧</h1>
+        <div class="travel-list">
+            {% for record in travel_records %}
+            <div class="travel-item">
+                <a href="{% url 'travel_detail' record.id %}" class="travel-link">
+                    {% if record.main_photo_url %}
+                    <img src="{{ record.main_photo_url.url }}" alt="メイン画像" width="50" height="50">
+                    {% else %}
+                    <img src="{% static 'photos/default.jpg' %}" alt="デフォルト画像" width="50" height="50">
+                    {% endif %}
+                    <div class="travel-info">
+                        <h3>{{ record.title }}</h3>
+                        <p>{{ record.start_date|date:"Y年m月d日" }} - {{ record.end_date|date:"Y年m月d日" }}</p>
+                    </div>
+                </a>
+            </div>
+            {% empty %}
+            <p>旅行記録がありません。</p>
+            {% endfor %}
+        </div>
 
-    <a href="{% url 'create_travel_record' %}">旅行を記録する</a>
-
-    <ul>
-        {% for record in travel_records %}
-        <li>
-            <a href="{% url 'travel_detail' record.id %}">
-                {{ record.title }} ({{ record.start_date|date:"Y年m月d日" }} - {{ record.end_date|date:"Y年m月d日" }})
-            </a>
-            {% if record.main_photo_url %}
-                <img src="{{ record.main_photo_url.url }}" alt="メイン画像" width="50" height="50">
-            {% else %}
-            <img src="{% static 'photos/default.jpg' %}" alt="デフォルト画像" width="50" height="50">   
-            {% endif %}    
-        </li>
-        {% empty %}
-        <li>旅行記録がありません。</li>
-        {% endfor %}
-    </ul>
 {% endblock %}
 

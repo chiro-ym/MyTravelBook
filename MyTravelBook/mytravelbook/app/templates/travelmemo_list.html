@@ -12,7 +12,9 @@
 <div id="delete-all-memos">
     <form action="{% url 'delete_all_memos' travel_record.id %}" method="post" style="display:inline;">
         {% csrf_token %}
-        <button type="submit" onclick="return confirm('この操作はもとに戻せません。すべてのメモを削除しますか？')">すべてのメモを削除</button>
+        <button type="submit" onclick="return confirm('この操作はもとに戻せません。すべてのメモを削除しますか？')">
+            すべてのメモを削除
+        </button>
     </form>
 </div>
 
@@ -57,25 +59,37 @@
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="input-container">
-            <label for="memo_photo_path" class="input-icon">📷 写真</label>
-            {{ form.memo_photo_path }}
-        
+            <!-- 画像アップロード -->
+            <label for="photo-input" class="input-icon">📷</label>
+            <input 
+                type="file" 
+                id="photo-input" 
+                name="memo_photo_path" 
+                accept="image/*" 
+                style="display: none;">
+
             <!-- 音声録音 -->
             <button type="button" id="record-btn">録音開始</button>
-            <button type="button" id="stop-btn" disabled>録音停止</button>
+            <button type="button" id="stop-btn" disabled>停止</button>
+            <p id="recording-status" style="display: none;">録音中...</p>
             <audio id="audio-playback" controls></audio>    
+            
             <!-- 音声データの保存用 -->
             <input type="hidden" name="audio_data" id="audio-data">
-            <!-- 位置情報 -->
-            <input type="hidden" id="memo_location" name="memo_location">
-            <input type="hidden" id="latitude" name="latitude">
-            <input type="hidden" id="longitude" name="longitude">
             <!-- テキスト入力 -->
             <input type="text" id="memo_text" name="memo_text" placeholder="メモを入力">
             <!-- 文字起こし -->
-            <button type="button" id="btn"><span aria-hidden="true">🎙</span> 音声入力</button>
-            <!-- 送信ボタン -->
-            <button type="submit" id="submit-btn" disabled>送信</button>
+            <button type="button" id="btn"><span aria-hidden="true">🎙️</span> 音声入力</button>
+            <!-- 写真プレビュー -->
+            <div id="photo-preview">
+                <img id="preview-image" src="" alt="プレビュー画像" style="display: none;">
+            </div>
+            <!-- 追加ボタン -->
+            <button type="submit" id="submit-btn" disabled>追加</button>
+            <!-- 位置情報 -->
+            <input type="hidden" id="memo_location" name="memo_location">
+            <input type="hidden" id="latitude" name="latitude">
+            <input type="hidden" id="longitude" name="longitude">    
         </div>
     </form>
 </div>

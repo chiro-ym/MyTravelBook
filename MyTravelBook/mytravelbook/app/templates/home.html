@@ -5,6 +5,8 @@
     <link rel="stylesheet" href="{% static 'css/home.css' %}"> 
 {% endblock %}
 
+{% block title %}MyTravelBook{% endblock %}
+
 {% block content %}
     <div class="home-buttons">
         <a href="{% url 'create_travel_record' %}">旅行を記録</a>
@@ -13,6 +15,27 @@
         {% else %}
             <p>たびメモはまだありません</p>
         {% endif %}
+    </div>
+
+    <!-- 最近の旅行セクション -->
+    <div class="recent-travels-container">
+        <h2 class="recent-travels-title">🛫最近の旅行</h2>
+        <div class="recent-travels">
+            {% for travel in recent_travels %}
+                <div class="travel-item">
+                    <a href="{% url 'travel_detail' travel.id %}">
+                        <!-- メイン写真を表示 -->
+                        {% if travel.main_photo_url %}
+                            <img src="{{ travel.main_photo_url.url }}" alt="{{ travel.title }}">
+                        {% else %}
+                            <img src="{% static 'photos/default.jpg' %}" alt="Default Image">
+                        {% endif %}
+                        <!-- 各旅行のタイトルを表示 -->
+                        <h3>{{ travel.title }}</h3>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 
     <div class="roulette-section">
@@ -33,23 +56,4 @@
         });
     });
     </script>
-
-    <!-- 最近の旅行セクション -->
-    <h1>🛫最近の旅行</h1>
-    <div class="recent-travels">
-        {% for travel in recent_travels %}
-            <div class="travel-item">
-                <a href="{% url 'travel_detail' travel.id %}">
-                    <!-- メイン写真を表示 -->
-                    {% if travel.main_photo_url %}
-                        <img src="{{ travel.main_photo_url.url }}" alt="{{ travel.title }}">
-                    {% else %}
-                        <img src="{% static 'photos/default.jpg' %}" alt="Default Image">
-                    {% endif %}
-                    <!-- タイトルを表示 -->
-                    <h2>{{ travel.title }}</h2>
-                </a>
-            </div>
-        {% endfor %}
-    </div>
 {% endblock %}

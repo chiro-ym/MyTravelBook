@@ -1,14 +1,92 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/travel-record-form.css' %}"> 
+    <script src="{% static 'js/photo-upload.js' %}"></script>
+{% endblock %}
 
 {% block title %}MyTravelBook{% endblock %}
 
 {% block content %}
-    <h1>旅行記録を編集</h1>
+    <h2>旅行記録を編集</h2>
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        {{  form.as_p }}
-        <button type="submit">保存</button>
-   
-    <a href="{% url 'travel_detail' travel_record.id %}">キャンセル</a>
+        {% if form.errors %}
+    <ul class="errorlist">
+        {% for field in form %}
+            {% for error in field.errors %}
+                <li>{{ field.label }}: {{ error }}</li>
+            {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+            <li>{{ error }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="title">{{ form.title.label }}</label>
+            {{ form.title }}
+        </div>
 
+        <div class="form-group">
+            <label for="start_date">{{ form.start_date.label }}</label>
+            {{ form.start_date }}
+        </div>
+
+        <div class="form-group">
+            <label for="end_date">{{ form.end_date.label }}</label>
+            {{ form.end_date }}
+        </div>
+
+        <div class="form-group">
+            <label for="prefecture">{{ form.prefecture.label }}</label>
+            {{ form.prefecture }}
+            <input type="text" id="city" name="city" placeholder="自由に入力してください"><br>
+            {% if form.city.errors %}
+            <div class="error">{{ form.city.errors }}</div>  <!-- エラー表示 -->
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label for="photo">メイン写真</label>
+            <input type="file" id="photo" class="custom-file-input" onchange="updateFileName(this)">
+            <label for="photo" class="custom-file-label">写真を追加</label>
+            <div id="selected-file" class="selected-file"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="comment">{{ form.comment.label }}</label>
+            <textarea id="comment" name="comment" rows="3" placeholder="コメントを入力してください"></textarea>
+        </div>
+
+        <details>
+            <summary>詳細を追加</summary>
+            <div class="form-group">
+                <label for="accommodation_info">{{ form.accommodation_info.label }}</label>
+                {{ form.accommodation_info }}
+            </div>
+            <div class="form-group">
+                <label for="meal_info">{{ form.meal_info.label }}</label>
+                {{ form.meal_info }}
+            </div>
+            <div class="form-group">
+                <label for="transport_info">{{ form.transport_info.label }}</label>
+                {{ form.transport_info }}
+            </div>
+            <div class="form-group">
+                <label for="cost_info">{{ form.cost_info.label }}</label>
+                {{ form.cost_info }}
+            </div>
+        </details>
+    
+        <div class="form-buttons">
+            <button type="submit" class="btn save-btn">保存</button>
+            <a href="{% url 'travel_detail' travel_record.id %}" class="btn cancel-btn">キャンセル</a>
+        </div>
+    </form>
     {% endblock %}
