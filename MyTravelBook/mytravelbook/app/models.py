@@ -29,7 +29,6 @@ class User(AbstractUser):
     groups = None
     user_permissions = None
     
-    
     name = models.CharField(max_length=64)#unique=True
     email = models.EmailField(max_length=128, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -64,7 +63,7 @@ class TravelRecord(models.Model):
     
     def __str__(self):
         return f"Travel record for {self.user} in {self.prefecture}"
-    
+
 class Prefecture(models.Model):
     name = models.CharField(max_length=100, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -97,7 +96,7 @@ class TravelMemo(models.Model):
     travel_record = models.ForeignKey(TravelRecord, on_delete=models.CASCADE)
     memo_text = models.TextField(blank=True, null=True)
     memo_photo_path = models.ImageField(upload_to='memo_photos/', blank=True, null=True)
-    audio_path = models.FileField(upload_to='audio/', blank=True, null=True)  # 修正
+    audio_path = models.FileField(upload_to='audio/', blank=True, null=True) 
     audio_transcript = models.TextField(blank=True, null=True)
     memo_location = models.CharField(max_length=255, blank=True, null=True)
     latitude = models.FloatField(null=True, blank=True)  # 緯度

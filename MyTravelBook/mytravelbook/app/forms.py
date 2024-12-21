@@ -135,6 +135,10 @@ class TravelRecordForm(forms.ModelForm):
     
     def save(self, commit=True):
         travel_record = super().save(commit=False)
+        
+        if not travel_record.prefecture:
+            travel_record.prefecture = Prefecture.objects.get(name="選択しない")
+        
         if not travel_record.main_photo_url:
             travel_record.main_photo_url = 'photos/default.jpg'
         if commit:
@@ -148,14 +152,13 @@ prefectures = [
     '岐阜県', '静岡県', '愛知県', '三重県', '滋賀県', '京都府', '大阪府', '兵庫県',
     '奈良県', '和歌山県', '鳥取県', '島根県', '岡山県', '広島県', '山口県',
     '徳島県', '香川県', '愛媛県', '高知県', '福岡県', '佐賀県', '長崎県', '熊本県',
-    '大分県', '宮崎県', '鹿児島県', '沖縄県', 'その他'
+    '大分県', '宮崎県', '鹿児島県', '沖縄県', 'その他', '選択しない'
 ]
 
-for pref_name in prefectures:
-    if not Prefecture.objects.filter(name=pref_name).exists():
-        Prefecture.objects.create(name=pref_name)
-    else:
-        print(f"{pref_name}はすでに存在しています。")
+#for pref_name in prefectures:
+ #      Prefecture.objects.create(name=pref_name)
+   # else:
+    #    print(f"{pref_name}はすでに存在しています。")
         
 class PhotoForm(forms.ModelForm):
     class Meta:
