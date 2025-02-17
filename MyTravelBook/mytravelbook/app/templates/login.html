@@ -12,24 +12,26 @@
        <h1>MyTravelBook</h1>
        <form method="post">
             {% csrf_token %}
-            <div>メールアドレス <input type="email" name="username"></div>
-            <div>パスワード <input type="password" name="password"></div>
-            <div class="button-container">
-                <button type="submit">ログイン</button>
-                <a href="{% url 'top' %}" class="center-link">トップに戻る</a>
-            <div>
+            <label for="email">メールアドレス</label>
+            <input type="email" name="username" id="email">
+
+            <label for="password1">パスワード</label>
+            <input type="password" name="password" id="password">
+            
+            <button type="submit">ログイン</button>
         </form>
+        <a href="{% url 'top' %}">トップに戻る</a>
 
         {% if form.errors %}
-            <div style="color: red;">
-                <ul>
-                    {% for field, errors in form.errors.items %}
-                        {% for error in errors %}
-                            <li>{{ error }}</li>
-                        {% endfor %}
+        <div class="error-message">
+            <ul>
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                        <li>{{ error }}</li>
                     {% endfor %}
-                </ul>
-            </div>
+                {% endfor %}
+            </ul>
+        </div>
         {% endif %}
     </div>
 </body>

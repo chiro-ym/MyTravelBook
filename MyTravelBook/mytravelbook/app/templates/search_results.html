@@ -1,19 +1,53 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/search.css' %}">
+{% endblock %}
 
 {% block content %}
-<form method="get" action="{% url 'travel_search' %}">
-    {{ form.as_p }}
-    <button type="submit">検索</button>
+<h1>検索結果</h1>
+
+<form method="get" action="{% url 'travel_search' %}" class="search-form">
+    <div class="search-keyword">
+        <label for="{{ form.keyword.id_for_label }}">検索キーワード</label>
+        {{ form.keyword }}
+    </div>
+
+    <div class="date-range">
+        <div>
+            <label for="{{ form.date_from.id_for_label }}">開始日</label>
+            {{ form.date_from }}
+        </div>
+        <div>
+            <label for="{{ form.date_to.id_for_label }}">終了日</label>
+            {{ form.date_to }}
+        </div>
+    </div>
+
+    <div class="search-button">
+        <button type="submit">検索</button>
+    </div>
 </form>
 
-<h1>検索結果一覧</h1>
-<ul>
+<ul class="search-results">
     {% for travel in results %}
         <li>
-            {{ travel.title }} - 
-            {% if travel.start_date %}{{ travel.start_date|date:"Y年m月d日" }}{% else %}開始日未設定{% endif %} - 
-            {% if travel.end_date %}{{ travel.end_date|date:"Y年m月d日" }}{% else %}終了日未設定{% endif %} - 
-            <a href="{% url 'travel_detail' travel.id %}">詳細へ</a>
+            <span class="travel-title">{{ travel.title }}</span> -
+            <span class="travel-date">
+                {% if travel.start_date %}
+                    {{ travel.start_date|date:"Y年m月d日" }}
+                {% else %}
+                    開始日未設定
+                {% endif %}
+                -
+                {% if travel.end_date %}
+                    {{ travel.end_date|date:"Y年m月d日" }}
+                {% else %}
+                    終了日未設定
+                {% endif %}
+            </span>
+            <a href="{% url 'travel_detail' travel.id %}" class="detail-link">詳細へ</a>
         </li>
     {% empty %}
         <li>該当する旅行記録がありません。</li>

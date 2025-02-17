@@ -12,26 +12,33 @@
         <h1>新規登録</h1>
         <form method="post">
             {% csrf_token %}
-            <div>ユーザー名 <input type="text" name="name" id="name" required></div>
-            <div>メールアドレス <input type="email" name="email" id="email" required></div>
-            <div>パスワード <input type="password" name="password1" id="password" required></div>
-            <div>確認用パスワード <input type="password" name="password2" id="password2" required></div>
-            <p class="form-note">パスワードは半角英字、数字を組み合わせた8文字以上で入力してください</p>
-            <button type="submit" class="form-button">登録</button>
+            <label for="password1">ユーザー名</label>
+            <input type="text" name="name">
+
+            <label for="password1">メールアドレス</label>
+            <input type="email" name="email">
+
+            <label for="password1">パスワード</label>
+            <input type="password" name="password1">
+
+            <label for="password1">確認用パスワード</label>
+            <input type="password" name="password2">
+            
+            <button type="submit">登録</button>
         </form>
+        <a href="{% url 'top' %}">トップに戻る</a>
 
     {% if form.errors %}
-        <div style="color: red;">
+        <div class="error-message">
             <ul>
                 {% for field, errors in form.errors.items %}
                     {% for error in errors %}
                         <li>{{ error }}</li>
-                {% endfor %}
+                    {% endfor %}
                 {% endfor %}
             </ul>
         </div>
-    {% endif %}
-
-    <a href="{% url 'top' %}" class="center-link">トップに戻る</a>
+        {% endif %}
+    </div>
 </body>
 </html>

@@ -1,13 +1,23 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MyTravelBook</title>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/top.css' %}">
 </head>
 <body>
-    <h1>MyTravelBook</h1>
-    <a href="{% url 'signup' %}">新規登録</a>
-    <a href="{% url 'login' %}">ログイン</a>
+    <div class="container">
+        <h1>MyTravelBook</h1>
+        <p>ようこそMyTravelBookへ</p>
+        <p>写真やメモで、たびの思い出を記録しよう。</p>
+        <a href="{% url 'signup' %}" class="btn btn-top">新規登録</a>
+        <a href="{% url 'login' %}" class="btn btn-top">ログイン</a>
+    </div>
 </body>
 </html>
+
+
+

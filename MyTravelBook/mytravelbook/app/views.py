@@ -122,6 +122,8 @@ class HomeView(View):
 def create_travel_record(request):
     if request.method == 'POST':
         form = TravelRecordForm(request.POST, request.FILES)
+        print("POST Data:", request.POST)  # デバッグ用
+        print("FILES Data:", request.FILES)  # デバッグ用
         if form.is_valid():
             travel_record = form.save(commit=False)
             travel_record.user = request.user

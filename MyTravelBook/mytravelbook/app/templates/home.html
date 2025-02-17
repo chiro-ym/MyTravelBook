@@ -9,9 +9,9 @@
 
 {% block content %}
     <div class="home-buttons">
-        <a href="{% url 'create_travel_record' %}">旅行を記録</a>
+        <a href="{% url 'create_travel_record' %}" class="btn">旅行を記録</a>
         {% if latest_travel_record_id %}
-            <a href="{% url 'travelmemo_list' latest_travel_record_id %}">たびメモ</a>
+            <a href="{% url 'travelmemo_list' latest_travel_record_id %}" class="btn">たびメモ</a>
         {% else %}
             <p>たびメモはまだありません</p>
         {% endif %}
@@ -40,7 +40,7 @@
 
     <div class="roulette-section">
         <p id="nextPrefecture">次の旅行先は…</p>
-        <button id="rouletteButton">ルーレットを回す</button>
+        <button id="rouletteButton" class="btn">ルーレットを回す</button>
     </div>
 
     <script>

@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MyTravelBook</title>       
 
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
     
     {% block extra_head %}
     <!-- ページごとの追加CSSやメタデータ -->
@@ -15,21 +15,26 @@
 </head>
 <body>
     <header>
-        <h1>
-            <a href="{% url 'home' %}" style="text-decoration: none; color: black;">MyTravelBook</a>
-        </h1>
-        <nav>
-            <ul>
-                <li><a href="{% url 'travel_list' %}">旅行一覧</a>
-                <li>
-                    <form method="get" action="{% url 'travel_search' %}">
-                        <input type="text" name="keyword" placeholder="検索バー">
-                        <button type="submit">検索</button>
-                    </form>
-                </li>
-                </li><a href="{% url 'mypage' %}">マイページ</a>
-            </ul>
-        </nav>
+        <div class="header-container">
+            <!-- ロゴ部分 -->
+            <h1 class="app-logo">
+                <a href="{% url 'home' %}">MyTravelBook</a>
+            </h1>
+
+            <!-- ナビゲーションと検索 -->
+            <nav class="header-nav">
+                <ul class="nav-list">
+                    <li><a href="{% url 'travel_list' %}">旅行一覧</a></li>
+                    <li>
+                        <form method="get" action="{% url 'travel_search' %}" class="header-search-form">
+                            <input type="text" name="keyword" placeholder="検索バー">
+                            <button type="submit">検索</button>
+                        </form>
+                    </li>
+                    <li><a href="{% url 'mypage' %}">マイページ</a></li>
+                </ul>
+            </nav>
+        </div>
     </header>
     
     {% block content %}
