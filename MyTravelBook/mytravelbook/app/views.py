@@ -16,6 +16,7 @@ from django.http import JsonResponse
 from django.core.files.base import ContentFile
 from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderServiceError
+from django.db.models import Q
 
 class TopView(View):
     def get(self, request):
@@ -500,12 +501,16 @@ def search_travel_records(request):
         date_to = form.cleaned_data.get('date_to')
         
         if keyword:
-            results = results.filter(title__icontains=keyword)
+            results = results.filter(
+                Q(title__icontains=keyword) | 
+                Q(prefecture__name__icontains=keyword) |
+                Q(city__icontains=keyword)                
+            )
 
         if date_from:
-            results = results.filter(date__gte=date_from)
+            results = results.filter(start_date__gte=date_from)
         if date_to:
-            results = results.filter(date__lte=date_to)
+            results = results.filter(end_date__lte=date_to)
             
     return render(request, 'search_results.html', context={
         'form': form,
