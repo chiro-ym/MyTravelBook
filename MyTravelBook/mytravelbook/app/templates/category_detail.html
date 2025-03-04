@@ -39,7 +39,10 @@
 </div>
 
 <div class="comment-area">
-    <p id="comment-display">{{ category.category_comment|default:"自由にコメントを入力" }}</p>
+    <h3>コメント欄</h3>
+    <div id="comment-display" class="comment-box">
+        {{ category.category_comment|default:"自由にコメントを入力" }}
+    </div>
 
     <form id="comment-form" method="post" action="{% url 'edit_comment' travel_id=travel_record.id category_id=category.id %}" style="display: none;">
         {% csrf_token %}
@@ -47,7 +50,7 @@
         <button type="submit">保存</button>
     </form>
 
-    <button id="edit-button">コメントを編集</button>
+    <button id="edit-button" class="edit-btn">コメントを編集</button>
 </div>
 
 <script>
