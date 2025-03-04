@@ -33,7 +33,7 @@
 <div class="photo-add">
     <form method="POST" action="{% url 'add_photo' category.id %}" enctype="multipart/form-data">
         {% csrf_token %}
-        <input type="file" name="photo_url" id="id_photo_url">
+        <input type="file" name="photo_url" id="id_photo_url" multiple>
         <button type="submit" class="button">写真を追加</button>
     </form>
 </div>
@@ -47,7 +47,7 @@
         <button type="submit">保存</button>
     </form>
 
-    <button id="edit-button">編集</button>
+    <button id="edit-button">コメントを編集</button>
 </div>
 
 <script>

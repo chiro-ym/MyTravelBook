@@ -341,16 +341,17 @@ def add_photo(request, category_id):
         print(request.FILES)
         form = PhotoForm(request.POST, request.FILES)
         
-        if form.is_valid():
-            photo = form.save(commit=False)
-            photo.category = category
-            photo.save()
-            print(photo.photo_url)
-            return redirect('category_detail',travel_id=category.travel_record.id, category_id=category.id)
-        print(form.errors)
+        photos = request.FILES.getlist('photo_url')#写真複数選択
         
-    else:
-        form = PhotoForm()
+        if not photos:
+            return redirect('category_detail', travel_id=travel_record.id, category_id=category.id)
+            
+        for photo_file in photos:
+            photo = Photo(photo_url=photo_file, category=category)
+            photo.save()
+            print(f"保存された写真: {photo.photo_url}")  # デバッグ用
+
+        return redirect('category_detail', travel_id=travel_record.id, category_id=category.id)
             
     return render(request, 'add_photo.html',context={
         'form': form,
@@ -367,10 +368,6 @@ def delete_photo(request, travel_id, category_id, photo_id):
     
     return redirect('category_detail',travel_id=travel_id, category_id=category_id)
         
-@login_required
-def edit_comment(request, travel_id, category_id):
-    category = get_object_or_404(Category, id=category_id)
-
 @login_required
 def edit_comment(request, travel_id, category_id):
     category = get_object_or_404(Category, id=category_id)
