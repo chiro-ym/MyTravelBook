@@ -10,11 +10,10 @@
 {% endblock %}
 
 
-{% include 'base_breadcrumb.html' %}  <!-- パンくずリスト -->
+{% include 'base_breadcrumb.html' %}
 
 {% include "base_tabs.html" with active_tab="travel_detail" %}<!-- タブ -->
 <div class="travel-detail-container">
-    <!-- 画像とテキスト情報を含むコンテナ -->
     <div class="travel-info">
         <div class="main-photo">
             {% if travel_record.main_photo_url %}

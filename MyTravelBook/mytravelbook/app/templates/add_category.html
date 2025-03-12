@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="{% static 'css/category.css' %}">
 </head>
 <body>
+
+<div class="container">
     <h3>カテゴリ追加</h3>
 
     <form method="POST">
@@ -22,6 +24,7 @@
         <button type="button" id="cancelButton">キャンセル</button>
         <button type="submit">保存</button>
     </form>
+</div>
 
     <script>
         document.getElementById('cancelButton').onclick = function() {

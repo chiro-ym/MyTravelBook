@@ -123,8 +123,6 @@ class HomeView(View):
 def create_travel_record(request):
     if request.method == 'POST':
         form = TravelRecordForm(request.POST, request.FILES)
-        print("POST Data:", request.POST)  # デバッグ用
-        print("FILES Data:", request.FILES)  # デバッグ用
         if form.is_valid():
             travel_record = form.save(commit=False)
             travel_record.user = request.user
@@ -147,7 +145,7 @@ def get_random_unvisited_prefecture(user):
     # 訪問済みの都道府県を取得
     visited_prefectures = TravelRecord.objects.filter(user=user).exclude(prefecture__isnull=True).values_list('prefecture__id', flat=True)
     # 未訪問の都道府県を取得
-    unvisited_prefectures = Prefecture.objects.exclude(id__in=visited_prefectures)
+    unvisited_prefectures = Prefecture.objects.exclude(id__in=visited_prefectures).exclude(name="その他")
     
     if unvisited_prefectures.exists():
         return random.choice(unvisited_prefectures)
@@ -157,7 +155,6 @@ def get_random_unvisited_prefecture(user):
 def roulette_view(request):
     prefecture = get_random_unvisited_prefecture(request.user)
     if prefecture:
-        print("Selected prefecture:", prefecture)  # デバッグ用
         return JsonResponse({'prefecture': prefecture.name})
     else:
         return JsonResponse({'error': '未訪問の都道府県がありません'})
@@ -289,7 +286,7 @@ class CustomCategoryDetailView(View):
         categories = travel_record.category_set.all()
 
         current_tab = category.category_name
-        active_tab = str(category_id)  # カスタムカテゴリ用に設定
+        active_tab = str(category_id)  # カスタムカテゴリ用
 
         return render(request, 'custom_category_detail.html', context={
             'travel_record': travel_record,
@@ -316,7 +313,7 @@ def edit_category(request, category_id):
             category.delete()  # カテゴリを削除
             return redirect('travel_detail', travel_id=category.travel_record.id)
 
-        # カテゴリ名を変更
+        # カテゴリ名変更
         category_name = request.POST.get('category_name', '').strip()
 
         if category_name:
@@ -349,7 +346,6 @@ def add_photo(request, category_id):
         for photo_file in photos:
             photo = Photo(photo_url=photo_file, category=category)
             photo.save()
-            print(f"保存された写真: {photo.photo_url}")  # デバッグ用
 
         return redirect('category_detail', travel_id=travel_record.id, category_id=category.id)
             
@@ -381,7 +377,6 @@ def edit_comment(request, travel_id, category_id):
             category.save()
             print(f"Saved comment: '{category.category_comment}'")  # デバッグ用
             
-            # カテゴリがカスタムか通常かに基づいてリダイレクト
             if category.is_custom:
                 return redirect('custom_category_detail', travel_id=travel_id, category_id=category_id)
             else:

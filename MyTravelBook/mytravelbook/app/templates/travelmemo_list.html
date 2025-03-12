@@ -1,97 +1,102 @@
 {% extends "base.html" %}
-
 {% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/memo.css' %}">
+{% endblock %}
 
 {% block title %}MyTravelBook{% endblock %}
 
 {% block content %}
-{% include 'base_breadcrumb.html' %} <!-- パンくずリスト -->
+{% include 'base_breadcrumb.html' %}
 
-{% include "base_tabs.html" with active_tab="travelmemo" %} <!-- タブ -->
+{% include "base_tabs.html" with active_tab="travelmemo" %}
 
-<div id="delete-all-memos">
-    <form action="{% url 'delete_all_memos' travel_record.id %}" method="post" style="display:inline;">
-        {% csrf_token %}
-        <button type="submit" onclick="return confirm('この操作はもとに戻せません。すべてのメモを削除しますか？')">
-            すべてのメモを削除
-        </button>
-    </form>
-</div>
+<div class="container">
+    <div id="delete-all-memos">
+        <form action="{% url 'delete_all_memos' travel_record.id %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" onclick="return confirm('この操作はもとに戻せません。すべてのメモを削除しますか？')">
+                すべてのメモを削除
+            </button>
+        </form>
+    </div>
 
-<div id="memo-list">
-    {% for memo in memos %}
-        <div class="memo">
-             <!-- コンテンツ部分（テキスト、画像、音声） -->
-             <div class="memo-content">
-                {% if memo.memo_text %}
-                    <p>{{ memo.memo_text }}</p>
-                {% endif %}
+    <div id="memo-list">
+        {% for memo in memos %}
+            <div class="memo">
+                <!-- コンテンツ部分（テキスト、画像、音声） -->
+                <div class="memo-content">
+                    {% if memo.memo_text %}
+                        <p>{{ memo.memo_text }}</p>
+                    {% endif %}
 
-                {% if memo.memo_photo_path %}
-                    <img src="{{ memo.memo_photo_path.url }}" alt="メモの画像" style="max-width: 300px;">
-                {% endif %}
+                    {% if memo.memo_photo_path %}
+                        <img src="{{ memo.memo_photo_path.url }}" alt="メモの画像" style="max-width: 300px;">
+                    {% endif %}
 
-                {% if memo.audio_path %}
-                    <audio controls>
-                        <source src="{{ memo.audio_path.url }}" type="audio/mp3">
-                        お使いのブラウザはオーディオタグをサポートしていません。
-                    </audio>
-                {% endif %}
-            </div>
-
-            <div class="memo-header">
-                <div class="memo-info">
-                    <span class="memo-date">投稿日時: {{ memo.created_at }}</span>
-                    {% if memo.memo_location %}
-                        <span class="memo-location">場所: {{ memo.memo_location }}</span>
+                    {% if memo.audio_path %}
+                        <audio controls>
+                            <source src="{{ memo.audio_path.url }}" type="audio/mp3">
+                            お使いのブラウザはオーディオタグをサポートしていません。
+                        </audio>
                     {% endif %}
                 </div>
-                <form action="{% url 'delete_memo' memo.id %}" method="post" style="display:inline;">                   
-                    {% csrf_token %}
-                    <button class="delete-btn" type="submit" onclick="return confirm('本当に削除しますか？')">削除</button>
-                </form>
-            </div>  
-        </div>
-    {% endfor %}
-</div>
 
-<div id="memo-form">
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="input-container">
-            <!-- 画像アップロード -->
-            <label for="photo-input" class="input-icon">📷</label>
-            <input 
-                type="file" 
-                id="photo-input" 
-                name="memo_photo_path" 
-                accept="image/*" 
-                style="display: none;">
-
-            <!-- 音声録音 -->
-            <button type="button" id="record-btn">録音開始</button>
-            <button type="button" id="stop-btn" disabled>停止</button>
-            <p id="recording-status" style="display: none;">録音中...</p>
-            <audio id="audio-playback" controls></audio>    
-            
-            <!-- 音声データの保存用 -->
-            <input type="hidden" name="audio_data" id="audio-data">
-            <!-- テキスト入力 -->
-            <input type="text" id="memo_text" name="memo_text" placeholder="メモを入力">
-            <!-- 文字起こし -->
-            <button type="button" id="btn"><span aria-hidden="true">🎙️</span> 音声入力</button>
-            <!-- 写真プレビュー -->
-            <div id="photo-preview">
-                <img id="preview-image" src="" alt="プレビュー画像" style="display: none;">
+                <div class="memo-header">
+                    <div class="memo-info">
+                        <span class="memo-date">投稿日時: {{ memo.created_at }}</span>
+                        {% if memo.memo_location %}
+                            <span class="memo-location">場所: {{ memo.memo_location }}</span>
+                        {% endif %}
+                    </div>
+                    <form action="{% url 'delete_memo' memo.id %}" method="post" style="display:inline;">                   
+                        {% csrf_token %}
+                        <button class="delete-btn" type="submit" onclick="return confirm('本当に削除しますか？')">削除</button>
+                    </form>
+                </div>  
             </div>
-            <!-- 追加ボタン -->
-            <button type="submit" id="submit-btn" disabled>追加</button>
-            <!-- 位置情報 -->
-            <input type="hidden" id="memo_location" name="memo_location">
-            <input type="hidden" id="latitude" name="latitude">
-            <input type="hidden" id="longitude" name="longitude">    
-        </div>
-    </form>
+        {% endfor %}
+    </div>
+
+    <div id="memo-form">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="input-container">
+                <!-- 画像アップロード -->
+                <label for="photo-input" class="input-icon">📷</label>
+                <input 
+                    type="file" 
+                    id="photo-input" 
+                    name="memo_photo_path" 
+                    accept="image/*" 
+                    style="display: none;">
+
+                <!-- 音声録音 -->
+                <button type="button" id="record-btn">録音開始</button>
+                <button type="button" id="stop-btn" disabled>停止</button>
+                <p id="recording-status" style="display: none;">録音中...</p>
+                <audio id="audio-playback" controls></audio>    
+                
+                <!-- 音声データの保存用 -->
+                <input type="hidden" name="audio_data" id="audio-data">
+                <!-- テキスト入力 -->
+                <input type="text" id="memo_text" name="memo_text" placeholder="メモを入力">
+                <!-- 文字起こし -->
+                <button type="button" id="btn"><span aria-hidden="true">🎙️</span> 音声入力</button>
+                <!-- 写真プレビュー -->
+                <div id="photo-preview">
+                    <img id="preview-image" src="" alt="プレビュー画像" style="display: none;">
+                </div>
+                <!-- 追加ボタン -->
+                <button type="submit" id="submit-btn" disabled>追加</button>
+                <!-- 位置情報 -->
+                <input type="hidden" id="memo_location" name="memo_location">
+                <input type="hidden" id="latitude" name="latitude">
+                <input type="hidden" id="longitude" name="longitude">    
+            </div>
+        </form>
+    </div>
 </div>
 
 <!-- 外部JavaScriptファイルの読み込み -->
@@ -99,9 +104,4 @@
 <script src="{% static 'js/audioRecorder.js' %}"></script>
 <script src="{% static 'js/location.js' %}"></script>
 <script src="{% static 'js/memoUI.js' %}"></script>
-{% endblock %}
-
-<!-- CSSファイルの読み込み -->
-{% block extra_head %}
-<link rel="stylesheet" href="{% static 'css/memo.css' %}">
 {% endblock %}

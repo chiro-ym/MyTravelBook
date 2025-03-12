@@ -17,20 +17,20 @@
         {% endif %}
     </div>
 
-    <!-- 最近の旅行セクション -->
+    <!-- 最近の旅行 -->
     <div class="recent-travels-container">
         <h2 class="recent-travels-title">🛫最近の旅行</h2>
         <div class="recent-travels">
             {% for travel in recent_travels %}
                 <div class="travel-item">
                     <a href="{% url 'travel_detail' travel.id %}">
-                        <!-- メイン写真を表示 -->
+                        <!-- メイン写真 -->
                         {% if travel.main_photo_url %}
                             <img src="{{ travel.main_photo_url.url }}" alt="{{ travel.title }}">
                         {% else %}
                             <img src="{% static 'photos/default.jpg' %}" alt="Default Image">
                         {% endif %}
-                        <!-- 各旅行のタイトルを表示 -->
+                        <!-- 各旅行のタイトル -->
                         <h3>{{ travel.title }}</h3>
                     </a>
                 </div>

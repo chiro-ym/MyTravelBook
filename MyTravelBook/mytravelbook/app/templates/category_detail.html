@@ -10,47 +10,49 @@
 {% include 'base_breadcrumb.html' %}
 {% include 'base_tabs.html' %}
 
-<h2>{{ category.category_name }}</h2>
+<div class="container">
+    <h2>{{ category.category_name }}</h2>
 
-<div class="photo-list">
-    {% for photo in photos %}
-        <div class="photo-card">
-            {% if photo.photo_url %}
-                <img src="{{ photo.photo_url.url }}" alt="写真">
-                <form method="POST" action="{% url 'delete_photo' travel_record.id category.id photo.id %}">
-                    {% csrf_token %}
-                    <button type="submit" class="btn">削除</button>
-                </form>
-            {% else %}
-                <div>写真がありません。</div>
-            {% endif %}
-        </div>
-    {% empty %}
-        <div>写真がありません。</div>
-    {% endfor %}
-</div>
-
-<div class="photo-add">
-    <form method="POST" action="{% url 'add_photo' category.id %}" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type="file" name="photo_url" id="id_photo_url" multiple>
-        <button type="submit" class="button">写真を追加</button>
-    </form>
-</div>
-
-<div class="comment-area">
-    <h3>コメント欄</h3>
-    <div id="comment-display" class="comment-box">
-        {{ category.category_comment|default:"自由にコメントを入力" }}
+    <div class="photo-list">
+        {% for photo in photos %}
+            <div class="photo-card">
+                {% if photo.photo_url %}
+                    <img src="{{ photo.photo_url.url }}" alt="写真">
+                    <form method="POST" action="{% url 'delete_photo' travel_record.id category.id photo.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn">削除</button>
+                    </form>
+                {% else %}
+                    <div>写真がありません。</div>
+                {% endif %}
+            </div>
+        {% empty %}
+            <div>写真がありません。</div>
+        {% endfor %}
     </div>
 
-    <form id="comment-form" method="post" action="{% url 'edit_comment' travel_id=travel_record.id category_id=category.id %}" style="display: none;">
-        {% csrf_token %}
-        <textarea name="category_comment" id="comment-input" style="width: 100%;">{{ category.category_comment }}</textarea>
-        <button type="submit">保存</button>
-    </form>
+    <div class="photo-add">
+        <form method="POST" action="{% url 'add_photo' category.id %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="photo_url" id="id_photo_url" multiple>
+            <button type="submit" class="button">写真を追加</button>
+        </form>
+    </div>
 
-    <button id="edit-button" class="edit-btn">コメントを編集</button>
+    <div class="comment-area">
+        <h3>コメント欄</h3>
+        <div id="comment-display" class="comment-box">
+            {{ category.category_comment|default:"自由にコメントを入力" }}
+        </div>
+
+        <form id="comment-form" method="post" action="{% url 'edit_comment' travel_id=travel_record.id category_id=category.id %}" style="display: none;">
+            {% csrf_token %}
+            <textarea name="category_comment" id="comment-input" style="width: 100%;">{{ category.category_comment }}</textarea>
+            <button type="submit">保存</button>
+        </form>
+
+        <button id="edit-button" class="edit-btn">コメントを編集</button>
+    </div>
 </div>
 
 <script>

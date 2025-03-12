@@ -19,12 +19,12 @@
         {% for category in categories %}
             <li>
                 {% if category.is_custom %}
-                    <!-- カスタムカテゴリへのリンク -->
+                    <!-- カスタムカテゴリ -->
                     <a href="{% url 'custom_category_detail' travel_record.id category.id %}" class="{% if active_tab == category.id|stringformat:"s" %}active{% endif %}">
                         {{ category.category_name }}
                     </a>
                 {% else %}
-                    <!-- デフォルトカテゴリへのリンク -->
+                    <!-- デフォルトカテゴリ -->
                     <a href="{% url 'category_detail' travel_record.id category.id %}" class="{% if active_tab == category.id|stringformat:"s" %}active{% endif %}">
                         {{ category.category_name }}
                     </a>
