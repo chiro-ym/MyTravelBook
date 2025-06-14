@@ -1,0 +1,96 @@
+.home-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    margin-top: 30px;
+}
+
+.home-buttons a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 15%;
+    font-size: 20px;
+    text-decoration: none;
+}
+
+.home-buttons p {
+    font-size: 18px;
+    color: #333;
+    font-weight: bold;
+}
+
+/* ルーレット */
+.roulette-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.roulette-section #nextPrefecture {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.roulette-section button {
+    padding: 5px 10px;
+    font-size: 18px;
+}
+
+/* 最近の旅行 */
+.recent-travels-container {
+    position: relative;
+    margin: 20px auto;
+    width: 80%;
+}
+
+.recent-travels-title {
+    position: absolute;
+    top: -40px;
+    left: 10px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.recent-travels {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    gap: 5px;
+    margin-top: 30px;
+}
+
+.travel-item {
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.travel-item img {
+    max-width: 100%; 
+    max-height: 350px;
+    margin: 0;
+    margin: 25px;
+    display: block;
+    object-fit: cover;
+    object-position: center;
+    aspect-ratio: 1 / 1;
+}
+
+.travel-item h3 {
+    font-weight: normal;
+    text-align: center;
+    margin-top: 10px;
+    color: #333;
+}
+
+.travel-item a {
+    text-decoration: none;
+    color: inherit;
+}
+
+#nextPrefecture {
+    color: #333;
+}

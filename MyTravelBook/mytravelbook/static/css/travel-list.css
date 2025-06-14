@@ -1,0 +1,82 @@
+.travel-list-container {
+    width: 70%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.travel-list-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.travel-list-header h2 {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.record-button {
+    display: inline-block;
+    font-size: 1em;
+    color: #fff;
+    background-color: #007bff;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    margin-top: 10px;
+}
+
+.record-button:hover {
+    background-color: #0056b3;
+}
+
+.travel-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.travel-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.travel-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    gap: 20px;
+}
+
+.travel-link img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.travel-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.travel-info h3 {
+    font-size: 1.2em;
+    margin: 0;
+    color: #333;
+}
+
+.travel-info p {
+    font-size: 0.9em;
+    color: #666;
+    margin: 5px 0 0;
+}
